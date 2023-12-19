@@ -6,6 +6,7 @@ import 'package:sello_via/widgets/Custombuttons.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import '../appConts/routes.dart';
 import '../widgets/customButton.dart';
+import '../widgets/customInput.dart';
 import '../widgets/loadin_widget.dart';
 
 
@@ -114,23 +115,11 @@ class _LogInscreenState extends State<LogInscreen> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              height: 50,
-              width: 500,
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xFFE1E1E1),
-                //color: Color(0xFFE1E1E1),
-              ),
-              child: TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  hintText: "Enter your Email",
-                  border: InputBorder.none,
-                ),
-              ),
-            ), // Email Input field
+
+            CustomInput(
+              hint: "Please Enter Your Email",
+              controller: emailController,
+            ),// Email Input field
             const SizedBox(
               height: 10,
             ),

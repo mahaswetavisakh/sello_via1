@@ -6,6 +6,7 @@ import 'package:sello_via/widgets/Custombuttons.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import '../appConts/routes.dart';
 import '../widgets/customButton.dart';
+import '../widgets/customInput.dart';
 import '../widgets/loadin_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -119,41 +120,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(
               height: 30,
             ),
-             Container(
-              height:50,
-             width: 500,
-            padding: const EdgeInsets.only(left:20,right: 20),
-            decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(20),
-            color: const Color(0xFFE1E1E1),
-               ),
-              child:  TextField(
-                controller: nameController,
-               decoration:const InputDecoration(
-                 hintText: "Enter your Name",
-                border: InputBorder.none,
-                ) ,
-              ),
-             ),
+
+            CustomInput(
+              hint: "Please Enter Your Name",
+              controller: nameController,
+
+            ),
             const SizedBox(
               height: 10,
             ),
-            Container(
-              height:50,
-              width: 500,
-              padding: const EdgeInsets.only(left:20,right: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xFFE1E1E1),
 
-              ),
-              child:  TextField(
-                controller: emailController,
-                decoration:const InputDecoration(
-                  hintText: "Enter your Email",
-                  border: InputBorder.none,
-                ) ,
-              ),
+            CustomInput(
+              hint: "Please Enter Your Email",
+              controller: emailController,
             ),
             const SizedBox(
               height: 10,

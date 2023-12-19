@@ -10,8 +10,8 @@ class Listing extends StatelessWidget{
       bottomNavigationBar: Bottomnavwithicons(),
 
       body: Padding(
-        padding: const EdgeInsets.only(left:20,right: 20,bottom: 40,top: 70),
-        child: Column(
+        padding: const EdgeInsets.all(15),
+        child: ListView(
           children: [
             Topbar("My Listings"),
             const SizedBox(

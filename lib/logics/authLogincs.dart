@@ -1,21 +1,37 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/appConts/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/userModel.dart';
+import 'cloudStorageLogic.dart';
 
 class AuthLogics{
 
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore _db=FirebaseFirestore.instance;
+  UserModel? user;
 
 
-  login({required String email,required String password,required BuildContext context}){
+  login({required String email,required String password,
+    required BuildContext context}){
     _auth.signInWithEmailAndPassword(
         email: email,
         password: password
     ).then((UserCredential credential) {
-      Navigator.pushNamed(context, Routes.profileRoute);
+      
+      _db.collection("users").doc(credential.user!.uid).get()
+          .then((value) async {
+            user=UserModel.getDataFromMap(value.data());
+            SharedPreferences preferences=await SharedPreferences.getInstance();
+            preferences.setString("user", jsonEncode(user!.toMap()));
+      });
+       Navigator.pushNamed(context, Routes.homeRoute);
     }).onError((FirebaseAuthException error, stackTrace) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,16 +45,23 @@ class AuthLogics{
         email:email,
         password: password
     ).then((UserCredential userCredential) async {
-      await userCredential.user!.updateDisplayName(name);
-      updateUser(
-        name: name,
-        email: email,
-        password: password,
-        profileUrl: "",
-        phoneNumber: "",
-        address: ""
+
+
+      user=UserModel(
+        userName: name,
+        userEmail: email,
+        userPassword: password,
+        userUID: userCredential.user!.uid
       );
-      Navigator.pushNamed(context, Routes.profileRoute);
+
+      SharedPreferences preferences=await SharedPreferences.getInstance();
+      preferences.setString("user", jsonEncode(user!.toMap()));
+
+      await _db.collection("users").doc(_auth.currentUser!.uid).set(
+          user!.toMap()
+      );
+
+      Navigator.pushNamed(context, Routes.homeRoute);
     }).onError((FirebaseAuthException error, stackTrace) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,38 +70,47 @@ class AuthLogics{
     });
   }
 
-  updateUser({
-     String? name,
-    String? profileUrl,
-     String? email,
-     String? phoneNumber,
-     String? address,
-     String? password,
-    bool isUpdate=false
-  }) async {
 
-    if(isUpdate){
-      await _db.collection("users").doc(_auth.currentUser!.uid).update(
-          {
-            "name":name,
-            "profileUrl":profileUrl,
-            "phoneNumber":phoneNumber,
-            "address":address,
-          }
-      );
-    }else{
-      await _db.collection("users").doc(_auth.currentUser!.uid).set(
-          {
-            "uid":_auth.currentUser!.uid,
-            "name":name,
-            "profileUrl":profileUrl,
-            "email":email,
-            "phoneNumber":phoneNumber,
-            "address":address,
-            "password":password,
-          }
-      );
-    }
 
+ Future getUserData() async {
+    SharedPreferences preferences=await SharedPreferences.getInstance();
+    String? userStringData= preferences.getString("user");
+    var userMapData=jsonDecode(userStringData!);
+    user=UserModel.getDataFromMap(userMapData);
+  }
+
+
+  Future updateUserName(String name) async {
+     user!.userName=name;
+    await _db.collection("users").doc(user!.userUID).update(user!.toMap());
+     updateDataFromLocal();
+  }
+
+  Future updateUserPhoneNumber(String phoneNumber) async {
+    user!.userPhoneNumber=phoneNumber;
+    await _db.collection("users").doc(user!.userUID).update(user!.toMap());
+    updateDataFromLocal();
+  }
+
+  updateUserAddress(String userAddress){
+    user!.userAddress=userAddress;
+    _db.collection("users").doc(user!.userUID).update(user!.toMap());
+    updateDataFromLocal();
+  }
+
+  Future updateUserProfile(File imagePath) async {
+    String photoUrl = await CloudStorageLogic(
+        file: imagePath,
+        fileName: "${imagePath.path}.png",
+        folderName: "users"
+    ).uploadFile();
+    user!.userprofileUrl=photoUrl;
+    _db.collection("users").doc(user!.userUID).update(user!.toMap());
+    updateDataFromLocal();
+  }
+
+  updateDataFromLocal() async {
+    SharedPreferences preferences=await SharedPreferences.getInstance();
+    preferences.setString("user", jsonEncode(user!.toMap()));
   }
 }

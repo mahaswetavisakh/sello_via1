@@ -30,17 +30,21 @@ class _ProfilepageState extends State<Profilepage> {
   FirebaseStorage storage = FirebaseStorage.instance;
   String? photoUrl;
   XFile? _selectedImage;
+  final AuthLogics _authLogics=AuthLogics();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _nameController.text = _auth.currentUser!.displayName!;
-    _emailController.text = _auth.currentUser!.email!;
-    if(_auth.currentUser!.phoneNumber!=null){
-      _phoneController.text = _auth.currentUser!.phoneNumber!;
-    }
+    _authLogics.getUserData().then((value) {
+      setState(() {
+        _nameController.text = _authLogics.user!.userName!;
+        _emailController.text = _authLogics.user!.userEmail!;
+        _phoneController.text = _authLogics.user!.userPhoneNumber??"";
+        _addressController.text = _authLogics.user!.userAddress??"";
+        print( _authLogics.user!.toMap());
 
+      });
+    });
   }
 
   void updateProfile()async{
@@ -57,13 +61,13 @@ class _ProfilepageState extends State<Profilepage> {
           SnackBar(content:Text("Please enter your mobile number") )
       );
     }else{
-      AuthLogics().updateUser(
-        isUpdate: true,
-        profileUrl: photoUrl,
-        name: _nameController.text,
-        phoneNumber: _phoneController.text,
-        address: _addressController.text
-      );
+      showLoading(context);
+     await _authLogics.updateUserName(_nameController.text);
+     await _authLogics.updateUserPhoneNumber(_phoneController.text);
+      Navigator.pop(context);
+      setState(() {
+
+      });
     }
   }
 
@@ -74,9 +78,6 @@ class _ProfilepageState extends State<Profilepage> {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: ListView(
-            //mainAxisAlignment: MainAxisAlignment.start,
-           // crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               appBar(),
 
@@ -163,11 +164,7 @@ class _ProfilepageState extends State<Profilepage> {
 
                     showLoading(context);
 
-                     photoUrl = await CloudStorageLogic(
-                      file: File(_selectedImage!.path),
-                      fileName: "${_selectedImage!.name}.png",
-                      folderName: "users"
-                    ).uploadFile();
+
 
                     print("URL===${photoUrl}");
                     await _auth.currentUser!.updatePhotoURL(photoUrl);
@@ -205,7 +202,7 @@ class _ProfilepageState extends State<Profilepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                        Text(
-                        _auth.currentUser!.displayName!,
+                        _authLogics.user!.userName!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: true,

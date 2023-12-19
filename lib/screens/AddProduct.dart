@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/customButton.dart';
@@ -11,6 +12,22 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+
+  CollectionReference product=FirebaseFirestore.instance.collection("product");
+
+  void addProduct(){
+    final data={
+      'name':_productName.text,
+      'price': _productPrice.text,
+      'description':_productDescription.text,
+    'category': dropdownvalue,
+      'subcategory':dropdownvalue1
+
+    };
+    product.add(data);
+  }
+
+
   List<XFile>? _img=[];
   final TextEditingController _productName = TextEditingController();
   final TextEditingController _productPrice = TextEditingController();
@@ -35,33 +52,7 @@ class _AddProductState extends State<AddProduct> {
   List<String> items1 = ["subcategory1", "subcategory2", "subcategory3"];
 
 
-  List categories=[
-    {
-      "name":"Electronics",
-      "id":1,
-      "image":"/sdcs.png",
-      "subCategories":[
-        {
-          "name":"Laptops",
-          "id":11,
-          "image":"/sdcs.png",
-        }
-      ],
-    },
 
-    {
-      "name":"Vehicles",
-      "id":2,
-      "image":"/sdcs.png",
-      "subCategories":[
-        {
-          "name":"car",
-          "id":12,
-          "image":"/sdcs.png",
-        }
-      ],
-    }
-  ];
 
 
   @override
@@ -276,6 +267,7 @@ class _AddProductState extends State<AddProduct> {
                 CustomButton(
                   buttonText: "Add Product",
                   onTap: (){
+                    addProduct();
                     createProduct(context);
                   },
                 ),

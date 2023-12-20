@@ -5,7 +5,9 @@ import 'package:sello_via/screens/MainScreen.dart';
 import 'package:sello_via/screens/SplashScreen.dart';
 import 'package:sello_via/screens/Login.dart';
 import 'package:sello_via/screens/Profilepage.dart';
+import 'package:sello_via/screens/likeditem.dart';
 import 'package:sello_via/screens/listing.dart';
+import 'package:sello_via/screens/orders.dart';
 import 'package:sello_via/screens/registerScreen.dart';
 import 'package:sello_via/screens/sidebar.dart';
 
@@ -22,6 +24,9 @@ void main()async{
             Routes.registerRoute:(context)=>RegisterScreen(),
             Routes.homeRoute:(context)=>MainScreen(),
             Routes.sidebarRoute:(context)=>SideBar(),
+            Routes.orderRoute:(context)=>Orders(),
+            Routes.listingRoute:(context)=>Listing(),
+            Routes.likedItemRoute:(context)=>LikedItem(),
         },
 //home:Listing(),
         debugShowCheckedModeBanner: false,

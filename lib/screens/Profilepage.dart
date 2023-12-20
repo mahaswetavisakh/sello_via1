@@ -11,6 +11,7 @@ import '../logics/cloudStorageLogic.dart';
 import '../widgets/customButton.dart';
 import '../widgets/customInput.dart';
 import '../appConts/routes.dart';
+import '../widgets/profilepic.dart';
 
 class Profilepage extends StatefulWidget {
   @override
@@ -30,7 +31,9 @@ class _ProfilepageState extends State<Profilepage> {
   FirebaseStorage storage = FirebaseStorage.instance;
   String? photoUrl;
   XFile? _selectedImage;
-  final AuthLogics _authLogics=AuthLogics();
+  final AuthLogics _authLogics = AuthLogics();
+
+
 
   @override
   void initState() {
@@ -39,35 +42,40 @@ class _ProfilepageState extends State<Profilepage> {
       setState(() {
         _nameController.text = _authLogics.user!.userName!;
         _emailController.text = _authLogics.user!.userEmail!;
-        _phoneController.text = _authLogics.user!.userPhoneNumber??"";
-        _addressController.text = _authLogics.user!.userAddress??"";
-        print( _authLogics.user!.toMap());
-
+        _phoneController.text = _authLogics.user!.userPhoneNumber ?? "";
+        _addressController.text = _authLogics.user!.userAddress ?? "";
+        print(_authLogics.user!.toMap());
       });
     });
   }
 
-  void updateProfile()async{
-    if(_nameController.text.isEmpty){
+  void updateProfile() async {
+    if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Please enter your name")));
+    } else if (_emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Please enter your email")));
+    } else if (_phoneController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content:Text("Please enter your name") )
-      );
-    }else if(_emailController.text.isEmpty){
+          SnackBar(content: Text("Please enter your mobile number")));
+    }
+    else if (_phoneController.text.length != 13 ||
+        !_phoneController.text.startsWith('+')) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:Text("Please enter your email") )
-      );
-    }else if(_phoneController.text.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:Text("Please enter your mobile number") )
-      );
-    }else{
+          SnackBar(content: Text("Please ensure the phone number has a country code and is 10 digits")));
+    } else {
       showLoading(context);
-     await _authLogics.updateUserName(_nameController.text);
-     await _authLogics.updateUserPhoneNumber(_phoneController.text);
-      Navigator.pop(context);
-      setState(() {
+      await _authLogics.updateUserName(_nameController.text);
+      await _authLogics.updateUserPhoneNumber(_phoneController.text);
+      await _authLogics.updateUserAddress(_addressController.text);
 
-      });
+
+      Navigator.pop(context);
+      setState(() {ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Profile updated successfully"),
+        duration: Duration(seconds: 2), // Adjust the duration as needed
+      ));});
     }
   }
 
@@ -80,59 +88,82 @@ class _ProfilepageState extends State<Profilepage> {
           child: ListView(
             children: [
               appBar(),
-
-              Text("Name:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              Text(
+                "Name:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               CustomInput(
                 hint: "Enter your name",
                 controller: _nameController,
-              ),
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus();
+                },
 
+              ),
               const SizedBox(
                 height: 12,
               ),
-              Text("Email:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              Text(
+                "Email:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               CustomInput(
                 readOnly: true,
                 hint: "Email",
                 controller: _emailController,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus();
+                },
               ),
-
               const SizedBox(
                 height: 12,
               ),
-              Text("PhoneNumber:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              Text(
+                "PhoneNumber:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               CustomInput(
                 hint: "Phone number",
                 controller: _phoneController,
-              ),
+                inputType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus();
+                },
 
+
+              ),
               const SizedBox(
                 height: 12,
               ),
-              Text("Address:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              Text(
+                "Address:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               CustomInput(
                 hint: "Enter your Address",
                 controller: _addressController,
+                textInputAction: TextInputAction.done,
               ),
-
-
               const SizedBox(
                 height: 12,
               ),
-              Text("Change Password:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-              CustomInput(
-                hint: "Enter your New Password",
-                controller: _newPasswordController,
-              ),
-
-
-
+              // Text(
+              //   "Change Password:",
+              //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              // ),
+              // CustomInput(
+              //   hint: "Enter your New Password",
+              //   controller: _newPasswordController,
+              // ),
               const SizedBox(
                 height: 26,
               ),
               CustomButton(
                 buttonText: "Update Profile",
-                onTap: (){
+                onTap: () {
                   updateProfile();
                 },
               )
@@ -143,65 +174,33 @@ class _ProfilepageState extends State<Profilepage> {
     );
   }
 
-
-  Widget appBar(){
+  Widget appBar() {
     return SizedBox(
-      height:  MediaQuery.of(context).size.height*0.13,
+      height: MediaQuery.of(context).size.height * 0.13,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width*0.6,
+            width: MediaQuery.of(context).size.width * 0.6,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: () async {
-                    _selectedImage = await _picker.pickImage(
-                        source: ImageSource.gallery);
-
-                    showLoading(context);
-
-
-
-                    print("URL===${photoUrl}");
-                    await _auth.currentUser!.updatePhotoURL(photoUrl);
-                    Navigator.pop(context);
-
-                    setState(() {});
-                  },
-                  child: Container(
-                      height: 50,
-                      width: 50,
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: Colors.black, width: 3)),
-                      child: _auth.currentUser!.photoURL == null
-                          ? const Icon(
-                        Icons.account_circle_rounded,
-                        size: 40,
-                      )
-                          : CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            _auth.currentUser!.photoURL!),
-                        foregroundColor: Colors.grey,
-                      )),
-                ),
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.profileRoute);
+                    },
+                    child: ProfilepicWidget()),
                 const SizedBox(
-                  width: 5,
+                  width: 10,
                 ),
-
-
                 Flexible(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(
+                      Text(
                         _authLogics.user!.userName!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -218,7 +217,6 @@ class _ProfilepageState extends State<Profilepage> {
               ],
             ),
           ),
-
           Positioned(
             right: 0,
             child: IconButton(

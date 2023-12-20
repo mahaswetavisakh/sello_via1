@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/widgets/Custombuttons.dart';
 
+import '../appConts/routes.dart';
+
 class SideBar extends StatelessWidget{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   List<Account> account = [
 
     Account(
@@ -41,64 +45,94 @@ class SideBar extends StatelessWidget{
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: const EdgeInsets.only(left:30,right: 30,bottom: 40,top: 70),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("SelloVia", style: TextStyle(fontWeight: FontWeight.bold,fontSize:25)),
-                Icon(Icons.close,size: 35,),
-              ],
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("SelloVia", style: TextStyle(fontWeight: FontWeight.bold,fontSize:25)),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close, size: 35),
+                  ),
+                ],
+              ),
             ),
           ),
-          //APP Name & Close button
+
           SizedBox(
             height:430,
             child: ListView.builder(
 
               itemCount: account.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.only(left: 20,right: 20,bottom:9),
-                  width: 315,
-                  height: 88,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFD4E4E6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22),
+                return GestureDetector(
+                  onTap: () {
+                    switch (index) {
+                      case 0:
+                        Navigator.pushNamed(context, Routes.profileRoute);
+                        break;
+                      case 1:
+                        Navigator.pushNamed(context, Routes.orderRoute);
+                        break;
+                      case 2:
+                        Navigator.pushNamed(context, Routes.listingRoute);
+                        break;
+                      case 3:
+                        Navigator.pushNamed(context, Routes.likedItemRoute);
+                        break;
+                      default:
+                        break;
+                    }// Add other conditions for different sections if needed
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20,right: 20,bottom:9),
+                    width: 315,
+                    height: 88,
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFD4E4E6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Icon(account[index].icon, size: 50,color:Color(0xFF5E5E5E) ,),
-                        const SizedBox(width: 10,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("${account[index].maintext}",style:const  TextStyle(
-                              color: Color(0xFF5E5E5E),
-                              fontSize: 18,
-                              fontFamily: 'Fira Sans',
-                              fontWeight: FontWeight.w500,
-                            ),),
-                            Text("${account[index].childtext}",style: const TextStyle(
-                              color: Color(0xFF5E5E5E),
-                              fontSize: 13,
-                              fontFamily: 'Arial',
-                              fontWeight: FontWeight.w400,
-                            ),)
-                          ],
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        children: [
+                          Icon(account[index].icon, size: 50,color:Color(0xFF5E5E5E) ,),
+                          const SizedBox(width: 10,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("${account[index].maintext}",style:const  TextStyle(
+                                color: Color(0xFF5E5E5E),
+                                fontSize: 18,
+                                fontFamily: 'Fira Sans',
+                                fontWeight: FontWeight.w500,
+                              ),),
+                              Text("${account[index].childtext}",style: const TextStyle(
+                                color: Color(0xFF5E5E5E),
+                                fontSize: 13,
+                                fontFamily: 'Arial',
+                                fontWeight: FontWeight.w400,
+                              ),)
+                            ],
+                          )
+                        ],
+                      ),
                     ),
+
                   ),
-                  //doubt need little bit left
                 );
               },
             ),
+          ),
+          SizedBox(
+            height: 30,
           ),
 
           Row(
@@ -124,24 +158,32 @@ class SideBar extends StatelessWidget{
                     ),
                   ),
                   SizedBox(width: 10,),
-                  Container(
-                    width: 145,
-                    height: 44,
-                    decoration: ShapeDecoration(
-                      color: Color(0xFF3C3C3C),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  InkWell(
+                    onTap: (){
+
+                        _auth.signOut();
+                        Navigator.pushNamed(context, Routes.loginRoute);
+
+                    },
+                    child: Container(
+                      width: 145,
+                      height: 44,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFF3C3C3C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    child: const Center(
-                      child: Text('Sign out',
-                        style: TextStyle(
-                          color: Color(0xFFF5F5F5),
-                          fontSize: 18,
-                          fontFamily: 'Fira Sans',
-                          fontWeight: FontWeight.w500,
-                          height: 0,
-                        ),),
+                      child: const Center(
+                        child: Text('Sign out',
+                          style: TextStyle(
+                            color: Color(0xFFF5F5F5),
+                            fontSize: 18,
+                            fontFamily: 'Fira Sans',
+                            fontWeight: FontWeight.w500,
+                            height: 0,
+                          ),),
+                      ),
                     ),
                   )
 

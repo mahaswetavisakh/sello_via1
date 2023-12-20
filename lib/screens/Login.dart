@@ -20,6 +20,7 @@ class _LogInscreenState extends State<LogInscreen> {
 
   TextEditingController passwordController = TextEditingController();
 
+
   final FirebaseAuth _auth=FirebaseAuth.instance;
 
 
@@ -44,6 +45,12 @@ class _LogInscreenState extends State<LogInscreen> {
        AuthLogics().login(email: email,password: pwd,context: context);
     }
   }
+  bool isEmailValid(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,42 +126,25 @@ class _LogInscreenState extends State<LogInscreen> {
             CustomInput(
               hint: "Please Enter Your Email",
               controller: emailController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) {
+                FocusScope.of(context).nextFocus();
+              },
+
             ),// Email Input field
             const SizedBox(
               height: 10,
             ),
 
-            ValueListenableBuilder(
-                valueListenable: passwordVisible,
-              builder: (BuildContext context, value, Widget? child) {
-                  return  Container(
-                    height: 50,
-                    width: 500,
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFFE1E1E1),
-                    ),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: passwordVisible.value,
-                      decoration:  InputDecoration(
-                          hintText: "Enter your Password",
-                          border: InputBorder.none,
-                          suffixIcon: IconButton(
-                            icon: Icon(passwordVisible.value
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () {
-                              passwordVisible.value = !passwordVisible.value;
+            CustomInput(
+              hint: "Enter your Password",
+              controller: passwordController,
+              inputType: TextInputType.visiblePassword,
+              isPassword: true,
+              textInputAction: TextInputAction.done,
 
-                            },
-                          )
-                      ),
-                    ),
-                  );
 
-              }, ),
+            ),
 
 
             const SizedBox(

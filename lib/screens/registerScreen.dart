@@ -32,6 +32,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore _db=FirebaseFirestore.instance;
 
+  FocusNode _nameFocus = FocusNode();
+  FocusNode _emailFocus = FocusNode();
+  FocusNode _passwordFocus = FocusNode();
+
  void  createAccount(BuildContext context){
    String name=nameController.text;
    String emailId=emailController.text;
@@ -57,7 +61,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
    }
 
   }
-
+  bool isEmailValid(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
 
 
   @override
@@ -124,6 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             CustomInput(
               hint: "Please Enter Your Name",
               controller: nameController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) {
+                FocusScope.of(context).nextFocus();
+              },
 
             ),
             const SizedBox(
@@ -133,41 +144,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
             CustomInput(
               hint: "Please Enter Your Email",
               controller: emailController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) {
+                FocusScope.of(context).nextFocus();
+              },
+
             ),
             const SizedBox(
               height: 10,
             ),
-            ValueListenableBuilder(
-              valueListenable: passwordVisible,
-              builder: (BuildContext context, value, Widget? child) {
-                return  Container(
-                  height: 50,
-                  width: 500,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFFE1E1E1),
-                  ),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: passwordVisible.value,
-                    decoration:  InputDecoration(
-                        hintText: "Enter your Password",
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordVisible.value
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () {
-                            passwordVisible.value = !passwordVisible.value;
-
-                          },
-                        )
-                    ),
-                  ),
-                );
-
-              }, ),
+            CustomInput(
+              hint: "Enter your Password",
+              controller: passwordController,
+              inputType: TextInputType.visiblePassword,
+              isPassword: true,
+              textInputAction: TextInputAction.done,
+              // Or provide the next focus if needed
+            ),
             const SizedBox(
               height: 10,
             ),

@@ -20,7 +20,7 @@ class _AddProductState extends State<AddProduct> {
       'name':_productName.text,
       'price': _productPrice.text,
       'description':_productDescription.text,
-    'category': dropdownvalue,
+      'category': dropdownvalue,
       'subcategory':dropdownvalue1
 
     };
@@ -76,6 +76,10 @@ class _AddProductState extends State<AddProduct> {
                 CustomInput(
                   hint: "Please Enter Your Product Name",
                   controller: _productName,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) {
+                    FocusScope.of(context).nextFocus();
+                  },
                 ),
 
                 const SizedBox(
@@ -87,6 +91,10 @@ class _AddProductState extends State<AddProduct> {
                 CustomInput(
                   hint: "Please Enter Your Product Price",
                   controller: _productPrice,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) {
+                    FocusScope.of(context).nextFocus();
+                  },
                 ),
 
                 const SizedBox(
@@ -99,6 +107,7 @@ class _AddProductState extends State<AddProduct> {
                 CustomInput(
                   hint: "Please Enter Your Product Description",
                   controller: _productDescription,
+                  textInputAction: TextInputAction.done,
                 ),
 
                 const SizedBox(

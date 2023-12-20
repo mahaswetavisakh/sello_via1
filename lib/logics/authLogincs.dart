@@ -92,9 +92,9 @@ class AuthLogics{
     updateDataFromLocal();
   }
 
-  updateUserAddress(String userAddress){
+  Future updateUserAddress(String userAddress) async {
     user!.userAddress=userAddress;
-    _db.collection("users").doc(user!.userUID).update(user!.toMap());
+    await _db.collection("users").doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
   }
 

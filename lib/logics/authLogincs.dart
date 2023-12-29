@@ -75,6 +75,7 @@ class AuthLogics{
  Future getUserData() async {
     SharedPreferences preferences=await SharedPreferences.getInstance();
     String? userStringData= preferences.getString("user");
+    print("userStringData==${userStringData}");
     var userMapData=jsonDecode(userStringData!);
     user=UserModel.getDataFromMap(userMapData);
   }
@@ -98,13 +99,8 @@ class AuthLogics{
     updateDataFromLocal();
   }
 
-  Future updateUserProfile(File imagePath) async {
-    String photoUrl = await CloudStorageLogic(
-        file: imagePath,
-        fileName: "${imagePath.path}.png",
-        folderName: "users"
-    ).uploadFile();
-    user!.userprofileUrl=photoUrl;
+  Future updateUserProfile(String url) async {
+    user!.userprofileUrl=url;
     _db.collection("users").doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
   }

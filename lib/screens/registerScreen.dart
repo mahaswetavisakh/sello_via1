@@ -55,7 +55,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
      ScaffoldMessenger.of(context).showSnackBar(
          const SnackBar(content: Text("Please enter your vaild password"))
      );
-   } else{
+   }
+   else{
      showLoading(context);
      AuthLogics().register(email: emailId, password: pwd, name: name, context: context);
    }

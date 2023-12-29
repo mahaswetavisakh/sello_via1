@@ -29,6 +29,8 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
         _selectedImage = await _picker.pickImage(
             source: ImageSource.gallery);
 
+        // TODO = add condition
+
         showLoading(context);
 
         photoUrl = await CloudStorageLogic(
@@ -37,8 +39,9 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
             folderName: "users"
         ).uploadFile();
 
-        print("URL===${photoUrl}");
-        await _auth.currentUser!.updatePhotoURL(photoUrl);
+
+        // TODO : call 'updateUserProfile' function for update profile url in DB
+
         Navigator.pop(context);
 
         setState(() {});
@@ -64,3 +67,4 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
     );
   }
 }
+

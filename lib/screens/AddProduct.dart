@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sello_via/logics/cloudStorageLogic.dart';
 import '../widgets/customButton.dart';
 import '../widgets/customInput.dart';
 import '../widgets/navbar.dart';
@@ -15,14 +16,27 @@ class _AddProductState extends State<AddProduct> {
 
   CollectionReference product=FirebaseFirestore.instance.collection("product");
 
-  void addProduct(){
+  List<String> urls=[];
+  Future<void> addProduct() async {
+
+    for(XFile image in _img!){
+      String url=await CloudStorageLogic(
+        fileName:image.name,
+        folderName: "products",
+        file:File(image.path)
+      ).uploadFile();
+
+      urls.add(url);
+    }
+
+    print("urls==${urls}");
     final data={
       'name':_productName.text,
       'price': _productPrice.text,
       'description':_productDescription.text,
       'category': dropdownvalue,
-      'subcategory':dropdownvalue1
-
+      'subcategory':dropdownvalue1,
+      "images":urls
     };
     product.add(data);
   }
@@ -43,7 +57,9 @@ class _AddProductState extends State<AddProduct> {
     } else if (_productDescription.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Please enter your product description")));
-    } else {}
+    } else {
+      addProduct();
+    }
   }
 
   String dropdownvalue = "category1";
@@ -276,7 +292,7 @@ class _AddProductState extends State<AddProduct> {
                 CustomButton(
                   buttonText: "Add Product",
                   onTap: (){
-                    addProduct();
+
                     createProduct(context);
                   },
                 ),

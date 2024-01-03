@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sello_via/logics/cloudStorageLogic.dart';
-import '../widgets/customButton.dart';
+import 'package:sello_via/logics/cloud_storage_logic.dart';
+import '../appConts/routes.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
 import '../widgets/navbar.dart';
 
@@ -59,6 +60,7 @@ class _AddProductState extends State<AddProduct> {
           content: Text("Please enter your product description")));
     } else {
       addProduct();
+      Navigator.pushNamed(context, Routes.listingRoute);
     }
   }
 

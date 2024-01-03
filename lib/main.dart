@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/appConts/routes.dart';
-import 'package:sello_via/screens/MainScreen.dart';
-import 'package:sello_via/screens/SplashScreen.dart';
-import 'package:sello_via/screens/Login.dart';
+import 'package:sello_via/screens/mainscreen.dart';
+import 'package:sello_via/screens/splash_screen.dart';
+import 'package:sello_via/screens/login.dart';
 import 'package:sello_via/screens/Profilepage.dart';
 import 'package:sello_via/screens/likeditem.dart';
 import 'package:sello_via/screens/listing.dart';

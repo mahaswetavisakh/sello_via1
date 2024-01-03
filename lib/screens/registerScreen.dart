@@ -1,11 +1,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sello_via/logics/authLogincs.dart';
-import 'package:sello_via/widgets/Custombuttons.dart';
+import 'package:sello_via/logics/authLogics.dart';
+import 'package:sello_via/widgets/custombuttons.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import '../appConts/routes.dart';
-import '../widgets/customButton.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
 import '../widgets/loadin_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,6 +50,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
      ScaffoldMessenger.of(context).showSnackBar(
          const SnackBar(content: Text("Please enter your vaild email address"))
      );
+   }
+   else if (!isEmailValid(emailId)) {
+     ScaffoldMessenger.of(context).showSnackBar(
+         const SnackBar(content: Text("Please enter a valid email format")));
    }
    else if(pwd.isEmpty){
      ScaffoldMessenger.of(context).showSnackBar(

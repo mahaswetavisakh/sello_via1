@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sello_via/widgets/Custombuttons.dart';
+import 'package:sello_via/widgets/custombuttons.dart';
 import 'package:sello_via/widgets/navbar.dart';
 
 class Orderconfirmation extends StatelessWidget{

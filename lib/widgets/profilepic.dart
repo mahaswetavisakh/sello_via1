@@ -1,11 +1,11 @@
 import 'dart:io';
-
+import '../logics/authLogics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../logics/cloudStorageLogic.dart';
+import '../logics/cloud_storage_logic.dart';
 import 'loadin_widget.dart';
 
 class ProfilepicWidget extends StatefulWidget {
@@ -16,6 +16,8 @@ class ProfilepicWidget extends StatefulWidget {
 }
 
 class _ProfilepicWidgetState extends State<ProfilepicWidget> {
+  AuthLogics authLogics = AuthLogics();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
   String? photoUrl;
@@ -30,21 +32,26 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
             source: ImageSource.gallery);
 
         // TODO = add condition
+        if (_selectedImage!=null){
+          showLoading(context);
 
-        showLoading(context);
-
-        photoUrl = await CloudStorageLogic(
-            file: File(_selectedImage!.path),
-            fileName: "${_selectedImage!.name}.png",
-            folderName: "users"
-        ).uploadFile();
+          photoUrl = await CloudStorageLogic(
+              file: File(_selectedImage!.path),
+              fileName: "${_selectedImage!.name}.png",
+              folderName: "users"
+          ).uploadFile();
 
 
-        // TODO : call 'updateUserProfile' function for update profile url in DB
+          // TODO : call 'updateUserProfile' function for update profile url in DB
+          if (photoUrl != null) {
+            await authLogics.updateUserProfile(photoUrl!);
+          }
+          Navigator.pop(context);
 
-        Navigator.pop(context);
+          setState(() {});
+        }
 
-        setState(() {});
+
       },
       child: Container(
           height: 60,

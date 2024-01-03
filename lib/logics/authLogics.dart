@@ -9,7 +9,7 @@ import 'package:sello_via/appConts/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/userModel.dart';
-import 'cloudStorageLogic.dart';
+import 'cloud_storage_logic.dart';
 
 class AuthLogics{
 

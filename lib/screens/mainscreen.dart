@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/screens/explore.dart';
 import '../widgets/navbar.dart';
-import 'AddProduct.dart';
+import 'add_product.dart';
 import 'home.dart';
 import 'likeditem.dart';
 import 'messages.dart';

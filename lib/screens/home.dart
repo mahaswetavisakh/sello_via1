@@ -1,10 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/appConts/routes.dart';
-import 'package:sello_via/widgets/Customcontainer.dart';
+import 'package:sello_via/widgets/custom_container.dart';
 
 import '../widgets/profilepic.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final CollectionReference product = FirebaseFirestore.instance.collection('product');
+  
+  
   List<Itemdetails> details = [
     Itemdetails(
         image: "assets/watch.png",

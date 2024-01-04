@@ -47,6 +47,7 @@ class _CustomInputState extends State<CustomInput> {
       child: TextFormField(
         readOnly: widget.readOnly,
         controller: widget.controller,
+        autofocus: true,
         keyboardType: widget.inputType,
         obscureText: _isObscured,
         decoration: InputDecoration(

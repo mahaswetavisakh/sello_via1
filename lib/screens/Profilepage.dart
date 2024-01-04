@@ -52,18 +52,18 @@ class _ProfilepageState extends State<Profilepage> {
   void updateProfile() async {
     if (_nameController.text.isEmpty) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please enter your name")));
+          .showSnackBar(const SnackBar(content: Text("Please enter your name")));
     } else if (_emailController.text.isEmpty) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please enter your email")));
+          .showSnackBar(const SnackBar(content: Text("Please enter your email")));
     } else if (_phoneController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please enter your mobile number")));
+          const SnackBar(content: Text("Please enter your mobile number")));
     }
     else if (_phoneController.text.length != 13 ||
         !_phoneController.text.startsWith('+')) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please ensure the phone number has a country code and is 10 digits")));
+          const SnackBar(content: Text("Please ensure the phone number has a country code and is 10 digits")));
     } else {
       showLoading(context);
       await _authLogics.updateUserName(_nameController.text);
@@ -72,7 +72,7 @@ class _ProfilepageState extends State<Profilepage> {
 
 
       Navigator.pop(context);
-      setState(() {ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      setState(() {ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Profile updated successfully"),
         duration: Duration(seconds: 2), // Adjust the duration as needed
       ));});
@@ -88,7 +88,7 @@ class _ProfilepageState extends State<Profilepage> {
           child: ListView(
             children: [
               appBar(),
-              Text(
+              const Text(
                 "Name:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -104,7 +104,7 @@ class _ProfilepageState extends State<Profilepage> {
               const SizedBox(
                 height: 12,
               ),
-              Text(
+              const Text(
                 "Email:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -120,7 +120,7 @@ class _ProfilepageState extends State<Profilepage> {
               const SizedBox(
                 height: 12,
               ),
-              Text(
+              const Text(
                 "PhoneNumber:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -138,7 +138,7 @@ class _ProfilepageState extends State<Profilepage> {
               const SizedBox(
                 height: 12,
               ),
-              Text(
+              const Text(
                 "Address:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -191,7 +191,7 @@ class _ProfilepageState extends State<Profilepage> {
                     onTap: () {
                       Navigator.pushNamed(context, Routes.profileRoute);
                     },
-                    child: ProfilepicWidget()),
+                    child: const ProfilepicWidget()),
                 const SizedBox(
                   width: 10,
                 ),
@@ -205,7 +205,7 @@ class _ProfilepageState extends State<Profilepage> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: true,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                             fontSize: 20),
@@ -222,8 +222,9 @@ class _ProfilepageState extends State<Profilepage> {
             child: IconButton(
               iconSize: 30,
               icon: const Icon(Icons.login),
-              onPressed: () {
+              onPressed: () async {
                 _auth.signOut();
+                await _authLogics.logOut();
                 Navigator.pushNamed(context, Routes.loginRoute);
               },
             ),

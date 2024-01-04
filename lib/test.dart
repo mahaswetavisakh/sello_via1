@@ -1,102 +1,106 @@
 import 'package:flutter/material.dart';
-void main(){
-  runApp(MaterialApp(
-    home: Stepper(),
+import 'package:get/get.dart';
+
+int cartItemCount = 1;
+
+class ProductLogics extends GetxController {
+  List myProducts = ["Phone", "Laptop", "Wi-Fi"];
+  List myCartProduct = [];
+
+  void addProductToCart(String productName) {
+    myCartProduct.add(productName);
+    update();
+  }
+}
+
+
+void main() {
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Home(),
   ));
 }
 
 
-class Stepper extends StatefulWidget{
-  @override
-  State<Stepper> createState() => _StepperState();
-}
-
-class _StepperState extends State<Stepper> {
-  int index=0;
+class Home extends StatelessWidget {
+  ProductLogics logics = Get.put(ProductLogics());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          actions: [
+            Stack(
               children: [
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    color: index>=0?Colors.blue:Colors.red,
-                    shape: BoxShape.circle
+                const Icon(Icons.shopping_cart),
+                Positioned(
+                  top: -5,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
+                    child: GetBuilder<ProductLogics>(
+                        builder: (logic) {
+                      return Text(logics.myCartProduct.length.toString(),
+                        style: const TextStyle(
+                            color: Colors.white
+                        ),);
+                    }),
                   ),
-                ),
-
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  height: 5,
-                  width: 30,
-                  decoration: BoxDecoration(
-                      color: index>=1?Colors.blue:Colors.red,
-                  ),
-                ),
-
-
-
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                      color:index>=1?Colors.blue:Colors.red ,
-                      shape: BoxShape.circle
-                  ),
-                ),
-
-
-
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  height: 5,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color:index>=2?Colors.blue:Colors.red ,
-                  ),
-                ),
-
-
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                      color:index>=2?Colors.blue:Colors.red ,
-                      shape: BoxShape.circle
-                  ),
-                ),
+                )
               ],
-            ),
-
-            SizedBox(
-              height: 25,
-            ),
-            ElevatedButton(
-              onPressed: (){
-                index=index+1;
-                setState(() {
-
-                });
-              },
-              child: Text("Click"),
             )
+
           ],
         ),
-      ),
+        body: Center(
+          child: ListView.builder(
+            itemCount: logics.myProducts.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                  onTap: () {
+                    Get.to(ProductDetail());
+                  },
+                  child: Text(logics.myProducts[index]));
+            },
+          ),
+        )
+    );
+  }
+}
+
+class ProductDetail extends StatefulWidget {
+  @override
+  State<ProductDetail> createState() => _ProductDetailState();
+}
+
+class _ProductDetailState extends State<ProductDetail> {
+  ProductLogics logics = Get.put(ProductLogics());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.red,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigator.pop(context);
+              Get.back();
+            },
+          ),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              logics.addProductToCart("Mobile");
+            }, child: const Text("Add to cart"),
+          ),
+        )
     );
   }
 }

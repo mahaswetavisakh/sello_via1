@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sello_via/logics/authLogics.dart';
 
 import 'package:sello_via/widgets/custombuttons.dart';
@@ -46,7 +47,7 @@ class _LogInscreenState extends State<LogInscreen> {
     }
     else{
       showLoading(context);
-       AuthLogics().login(email: email,password: pwd,context: context);
+      _authLogics.login(email: email,password: pwd,context: context);
     }
   }
   bool isEmailValid(String email) {
@@ -55,6 +56,7 @@ class _LogInscreenState extends State<LogInscreen> {
   }
 
 
+  AuthLogics _authLogics=Get.put(AuthLogics());
 
   @override
   Widget build(BuildContext context) {

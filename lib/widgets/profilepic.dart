@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:get/get.dart';
+
 import '../logics/authLogics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +18,7 @@ class ProfilepicWidget extends StatefulWidget {
 }
 
 class _ProfilepicWidgetState extends State<ProfilepicWidget> {
-  AuthLogics authLogics = AuthLogics();
+  AuthLogics authLogics = Get.put(AuthLogics());
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
@@ -24,15 +26,23 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
   XFile? _selectedImage;
 
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authLogics.getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  InkWell(
+    return InkWell(
       onTap: () async {
         _selectedImage = await _picker.pickImage(
             source: ImageSource.gallery);
 
         // TODO = add condition
-        if (_selectedImage!=null){
+        if (_selectedImage != null) {
           showLoading(context);
 
           photoUrl = await CloudStorageLogic(
@@ -42,7 +52,6 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
           ).uploadFile();
 
 
-          // TODO : call 'updateUserProfile' function for update profile url in DB
           if (photoUrl != null) {
             await authLogics.updateUserProfile(photoUrl!);
           }
@@ -50,8 +59,6 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
 
           setState(() {});
         }
-
-
       },
       child: Container(
           height: 60,
@@ -66,11 +73,13 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
             Icons.account_circle_rounded,
             size: 40,
           )
-              : CircleAvatar(
-            backgroundImage: NetworkImage(
-                _auth.currentUser!.photoURL!),
-            foregroundColor: Colors.grey,
-          )),
+              : GetBuilder<AuthLogics>(builder: (logic) {
+            return CircleAvatar(
+              backgroundImage: NetworkImage(
+                  authLogics.user!.userprofileUrl!),
+              foregroundColor: Colors.grey,
+            );
+          })),
     );
   }
 }

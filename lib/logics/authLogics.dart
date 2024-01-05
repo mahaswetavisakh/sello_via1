@@ -6,9 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sello_via/appConts/routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../appConts/collectionName.dart';
 import '../models/userModel.dart';
 import 'cloud_storage_logic.dart';
@@ -18,12 +17,12 @@ class AuthLogics extends GetxController{
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore database=FirebaseFirestore.instance;
   UserModel? user;
+  final GetStorage _localDb = GetStorage();
 
 
 
   Future<void> logOut() async {
-    SharedPreferences preferences=await SharedPreferences.getInstance();
-    await preferences.remove("user");
+    _localDb.remove("user");
   }
   login({required String email,required String password,
     required BuildContext context}){
@@ -35,10 +34,9 @@ class AuthLogics extends GetxController{
       database.collection("users").doc(credential.user!.uid).get()
           .then((value) async {
             // TODO: add condition for value is no null
-            print("DATA Of USER==${value.data()}");
+
             user=UserModel.getDataFromMap(value.data());
-            SharedPreferences preferences=await SharedPreferences.getInstance();
-            preferences.setString("user", jsonEncode(user!.toMap()));
+            _localDb.write("user", user!.toMap());
       });
        Navigator.pushNamed(context, Routes.homeRoute);
     }).onError((FirebaseAuthException error, stackTrace) {
@@ -63,9 +61,8 @@ class AuthLogics extends GetxController{
         userUID: userCredential.user!.uid
       );
 
-      SharedPreferences preferences=await SharedPreferences.getInstance();
-      preferences.setString("user", jsonEncode(user!.toMap()));
 
+      _localDb.write("user", user!.toMap());
       await database.collection(CollectionNames.userCollectionName).doc(_auth.currentUser!.uid).set(
           user!.toMap()
       );
@@ -81,12 +78,9 @@ class AuthLogics extends GetxController{
 
 
 
- Future getUserData() async {
-    SharedPreferences preferences=await SharedPreferences.getInstance();
-    String? userStringData= preferences.getString("user");
-    print("userStringData==${userStringData}");
-    var userMapData=jsonDecode(userStringData!);
-    user=UserModel.getDataFromMap(userMapData);
+  UserModel getUserData()  {
+    user=UserModel.getDataFromMap(_localDb.read("user",));
+    return user!;
   }
 
 
@@ -94,18 +88,21 @@ class AuthLogics extends GetxController{
      user!.userName=name;
     await database.collection(CollectionNames.userCollectionName).doc(user!.userUID).update(user!.toMap());
      updateDataFromLocal();
+
   }
 
   Future updateUserPhoneNumber(String phoneNumber) async {
     user!.userPhoneNumber=phoneNumber;
     await database.collection("users").doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
+
   }
 
   Future updateUserAddress(String userAddress) async {
     user!.userAddress=userAddress;
     await database.collection(CollectionNames.userCollectionName).doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
+
   }
 
   Future updateUserProfile(String url) async {
@@ -113,11 +110,10 @@ class AuthLogics extends GetxController{
     database.collection("users").doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
     print("UserData==${user!.userprofileUrl}");
-    update();
   }
 
   updateDataFromLocal() async {
-    SharedPreferences preferences=await SharedPreferences.getInstance();
-    preferences.setString("user", jsonEncode(user!.toMap()));
+    _localDb.write("user",user!.toMap());
+    update();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sello_via/appConts/routes.dart';
+import 'package:sello_via/logics/authLogics.dart';
 import 'package:sello_via/widgets/custom_container.dart';
 
 import '../widgets/profilepic.dart';
@@ -11,9 +13,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final CollectionReference product = FirebaseFirestore.instance.collection('product');
-  
-  
+  final CollectionReference product = FirebaseFirestore.instance.collection(
+      'product');
+  final AuthLogics _authLogics = Get.find();
+
   List<Itemdetails> details = [
     Itemdetails(
         image: "assets/watch.png",
@@ -37,6 +40,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print("HELLO");
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -45,27 +49,30 @@ class _HomeState extends State<Home> {
             children: [
               Row(
                 children: [
-                  ProfilepicWidget(),
+                  const ProfilepicWidget(),
                   const SizedBox(
                     width: 20,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
                         ),
+
                         Text(
-                          "Alice Eve",
-                          style: TextStyle(
+                          _authLogics.getUserData()
+                              .userName!.toString(),
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             fontSize: 23,
                           ),
                         ),
-                        Text(
+
+                        const Text(
                           "Welcome back!",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -119,7 +126,10 @@ class _HomeState extends State<Home> {
                     height: 20,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.4,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: details.length,
@@ -133,13 +143,13 @@ class _HomeState extends State<Home> {
                                 child: Stack(
                                   children: [
                                     Container(
-                                        //height:300
+                                      //height:300
                                         child: Image.asset(
-                                      '${details[index].image}',
-                                      fit: BoxFit.cover,
-                                      height: 230,
-                                      width: 250,
-                                    )),
+                                          '${details[index].image}',
+                                          fit: BoxFit.cover,
+                                          height: 230,
+                                          width: 250,
+                                        )),
                                     Positioned(
                                         bottom: 15,
                                         right: 15,
@@ -150,7 +160,7 @@ class _HomeState extends State<Home> {
                                             color: const Color(0x7EE0E0DF),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(100),
+                                              BorderRadius.circular(100),
                                             ),
                                           ),
                                           child: const Icon(
@@ -165,12 +175,13 @@ class _HomeState extends State<Home> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .start,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${details[index].item}',
@@ -265,13 +276,13 @@ class _HomeState extends State<Home> {
                                 child: Stack(
                                   children: [
                                     Container(
-                                        //height:300
+                                      //height:300
                                         child: Image.asset(
-                                      '${details[index].image}',
-                                      fit: BoxFit.cover,
-                                      height: 230,
-                                      width: 250,
-                                    )),
+                                          '${details[index].image}',
+                                          fit: BoxFit.cover,
+                                          height: 230,
+                                          width: 250,
+                                        )),
                                     Positioned(
                                       bottom: 15,
                                       right: 15,
@@ -282,7 +293,7 @@ class _HomeState extends State<Home> {
                                           color: const Color(0x7EE0E0DF),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(100),
+                                            BorderRadius.circular(100),
                                           ),
                                         ),
                                         child: const Icon(
@@ -298,12 +309,13 @@ class _HomeState extends State<Home> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .start,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${details[index].item}',

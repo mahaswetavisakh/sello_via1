@@ -38,15 +38,10 @@ class _ProfilepageState extends State<Profilepage> {
   @override
   void initState() {
     super.initState();
-    _authLogics.getUserData().then((value) {
-      setState(() {
-        _nameController.text = _authLogics.user!.userName!;
-        _emailController.text = _authLogics.user!.userEmail!;
-        _phoneController.text = _authLogics.user!.userPhoneNumber ?? "";
-        _addressController.text = _authLogics.user!.userAddress ?? "";
-        print(_authLogics.user!.toMap());
-      });
-    });
+    _nameController.text = _authLogics.getUserData().userName!;
+    _emailController.text = _authLogics.getUserData().userEmail!;
+    _phoneController.text = _authLogics.getUserData().userPhoneNumber ?? "";
+    _addressController.text = _authLogics.getUserData().userAddress ?? "";
   }
 
   void updateProfile() async {

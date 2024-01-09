@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 
+import '../appConts/const.dart';
 import '../logics/authLogics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -63,23 +64,29 @@ class _ProfilepicWidgetState extends State<ProfilepicWidget> {
       child: Container(
           height: 60,
           width: 60,
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                  color: Colors.black, width: 3)),
-          child: _auth.currentUser!.photoURL == null
-              ? const Icon(
-            Icons.account_circle_rounded,
-            size: 40,
-          )
+            gradient:  Const.ButtonColour,),
+    child: Container(
+    padding: const EdgeInsets.all(3), // Adjust inner padding
+    decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    color: Colors.white, // Inner circle color
+    ),
+    child: ClipOval(
+    child: _auth.currentUser!.photoURL == null
+    ? const Icon(
+    Icons.account_circle_rounded,
+    size: 40,
+    )
               : GetBuilder<AuthLogics>(builder: (logic) {
             return CircleAvatar(
               backgroundImage: NetworkImage(
                   authLogics.user!.userprofileUrl!),
               foregroundColor: Colors.grey,
             );
-          })),
+          })),),),
     );
   }
 }

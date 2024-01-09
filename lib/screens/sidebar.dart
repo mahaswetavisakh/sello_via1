@@ -43,7 +43,7 @@ class SideBar extends StatelessWidget{
             child: Text("SelloVia Version 1.0",style: TextStyle(color: Colors.white),),),
         ],
       ),
-      body: Column(
+      body: ListView(
         children: [
           SafeArea(
             child: Padding(
@@ -52,12 +52,7 @@ class SideBar extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("SelloVia", style: TextStyle(fontWeight: FontWeight.bold,fontSize:25)),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.close, size: 35),
-                  ),
+
                 ],
               ),
             ),

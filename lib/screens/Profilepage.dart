@@ -170,62 +170,53 @@ class _ProfilepageState extends State<Profilepage> {
   }
 
   Widget appBar() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.13,
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.6,
-            child: Row(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+      children: [
+        Row(
+
+          children: [
+            InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.profileRoute);
+                },
+                child: const ProfilepicWidget()),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.profileRoute);
-                    },
-                    child: const ProfilepicWidget()),
-                const SizedBox(
-                  width: 10,
+                const Align(
+                  alignment: Alignment.centerLeft,
                 ),
-                Flexible(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _authLogics.user!.userName!,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: true,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                            fontSize: 20),
-                      ),
-                      Text(_auth.currentUser!.email!)
-                    ],
-                  ),
+                Text(
+                  _authLogics.user!.userName!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  softWrap: true,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                      fontSize: 20),
                 ),
+                Text(_auth.currentUser!.email!)
               ],
             ),
-          ),
-          Positioned(
-            right: 0,
-            child: IconButton(
-              iconSize: 30,
-              icon: const Icon(Icons.login),
-              onPressed: () async {
-                _auth.signOut();
-                await _authLogics.logOut();
-                Navigator.pushNamed(context, Routes.loginRoute);
+          ],
+    ),
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
+              icon: Icon(Icons.close, size: 35),
             ),
-          )
-        ],
-      ),
+
+
+
+      ],
     );
   }
 }

@@ -22,9 +22,9 @@ class _AddProductState extends State<AddProduct> {
 
     for(XFile image in _img!){
       String url=await CloudStorageLogic(
-        fileName:image.name,
-        folderName: "products",
-        file:File(image.path)
+          fileName:image.name,
+          folderName: "products",
+          file:File(image.path)
       ).uploadFile();
 
       urls.add(url);
@@ -90,7 +90,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 const Text("Product Name:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 CustomInput(
                   hint: "Please Enter Your Product Name",
                   controller: _productName,
@@ -105,7 +105,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 const Text("Product Price:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 CustomInput(
                   hint: "Please Enter Your Product Price",
                   controller: _productPrice,
@@ -120,24 +120,12 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 const Text("Product Description:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
 
                 CustomInput(
                   hint: "Please Enter Your Product Description",
                   controller: _productDescription,
                   textInputAction: TextInputAction.done,
-                  firstSuffixWidget: IconButton(
-                    icon: Icon(Icons.edit), // Replace with your edit icon
-                    onPressed: () {
-
-                    },
-                  ),
-                  secondSuffixWidget: IconButton(
-                    icon: Icon(Icons.delete), // Replace with your delete icon
-                    onPressed: () {
-                      
-                    },
-                  ),
                 ),
 
                 const SizedBox(
@@ -145,7 +133,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 const Text("Product Category:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 Container(
                   height: 50,
                   width: 500,
@@ -180,7 +168,7 @@ class _AddProductState extends State<AddProduct> {
 
                 const Text("Product SubCategory:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 Container(
                   height: 50,
                   width: 500,
@@ -210,7 +198,7 @@ class _AddProductState extends State<AddProduct> {
 
                 const Text("Product Image:",
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 const SizedBox(
                   height: 10,
                 ),
@@ -252,7 +240,7 @@ class _AddProductState extends State<AddProduct> {
                         width: 100,
                         decoration: BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
+                            const BorderRadius.all(Radius.circular(15)),
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: FileImage(

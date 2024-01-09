@@ -64,21 +64,22 @@ class Explore extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left:20,right: 20,bottom: 40,top: 70),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Topbar("Explore"),
-            SizedBox(
-              height: 20,
-            ),
-            Search("Search"),
-            SizedBox(
-              height: 20,
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Topbar("Explore"),
+              SizedBox(
+                height: 20,
+              ),
+              Search("Search"),
+              SizedBox(
+                height: 20,
+              ),
     SizedBox(
-      height: 40,
+        height: 40,
 
     child: ListView.builder(
 
@@ -88,134 +89,135 @@ class Explore extends StatelessWidget{
     return Column(
 
 
-        children: [
-          Container(
-            padding: EdgeInsets.only(left:20,right: 20,top:10,bottom:10),
-            height:40,
-            width: 80,
-            margin: EdgeInsets.only(right:10),
-            alignment: Alignment.center,
-            decoration: ShapeDecoration(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left:20,right: 20,top:10,bottom:10),
+              height:40,
+              width: 80,
+              margin: EdgeInsets.only(right:10),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
 
-              color: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(23),
+                color: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(23),
+                ),
               ),
+              child: Text("${listing[index].item}",style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500
+              ),),
             ),
-            child: Text("${listing[index].item}",style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500
-            ),),
-          ),
-          SizedBox(
-            width: 20,
+            SizedBox(
+              width: 20,
 
-          ),
+            ),
 
-      ],
+        ],
     );
     },),),
-            Expanded(
-              child: ListView.builder(
+              Expanded(
+                child: ListView.builder(
 
-                itemCount: details.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('${details[index].title}',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),),
-                          subtitle: Text('${details[index].subtitle}',style: TextStyle(
-                            fontWeight: FontWeight.w500
-                          ),),
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                '${details[index].profile}'
+                  itemCount: details.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text('${details[index].title}',style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),),
+                            subtitle: Text('${details[index].subtitle}',style: TextStyle(
+                              fontWeight: FontWeight.w500
+                            ),),
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  '${details[index].profile}'
+                              ),
+                            ),
+                            trailing: Icon(Icons.more_vert_outlined),
+                          ),
+                          Container(
+                            width: 300,
+                            height: 300,
+                            color: Colors.transparent,
+                            child: Stack(
+                              children: [
+                                Image.asset('${details[index].image}',fit: BoxFit.cover,height: 300,width:300,),
+
+                                Positioned(
+                                    bottom:15,
+                                    right:15,
+                                    child: Container(
+                                      height: 30,
+                                      width:30,
+                                      decoration: ShapeDecoration(
+                                        color: Colors.black12,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(100),
+                                        ),
+                                      ),
+
+                                      child: Icon(Icons.favorite_outline,color: Colors.red,),
+                                    ))
+                              ],
                             ),
                           ),
-                          trailing: Icon(Icons.more_vert_outlined),
-                        ),
-                        Container(
-                          width: 300,
-                          height: 300,
-                          color: Colors.transparent,
-                          child: Stack(
-                            children: [
-                              Image.asset('${details[index].image}',fit: BoxFit.cover,height: 300,width:300,),
 
-                              Positioned(
-                                  bottom:15,
-                                  right:15,
-                                  child: Container(
-                                    height: 30,
-                                    width:30,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.black12,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(100),
-                                      ),
-                                    ),
-
-                                    child: Icon(Icons.favorite_outline,color: Colors.red,),
-                                  ))
-                            ],
+                           Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('${details[index].item}',style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Colors.black87,
+                                    ),),
+                                    Row(
+                                      children: [
+                                        Text('Make: ${details[index].make}',style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black26,
+                                        ),),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('| Year: ${details[index].year}',style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black26,
+                                        ),),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Text('₹ ${details[index].price}',style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black87,
+                                ),),
+                                SizedBox(
+                                  height: 20,
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-
-                         Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('${details[index].item}',style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.black87,
-                                  ),),
-                                  Row(
-                                    children: [
-                                      Text('Make: ${details[index].make}',style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.black26,
-                                      ),),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text('| Year: ${details[index].year}',style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.black26,
-                                      ),),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Text('₹ ${details[index].price}',style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.black87,
-                              ),),
-                              SizedBox(
-                                height: 20,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

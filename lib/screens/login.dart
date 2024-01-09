@@ -27,6 +27,8 @@ class _LogInscreenState extends State<LogInscreen> {
 
   ValueNotifier passwordVisible=ValueNotifier(true);
 
+  bool _isObscured = true;
+
   void login(BuildContext context) {
     String email=emailController.text;
     String pwd=passwordController.text;
@@ -146,10 +148,16 @@ class _LogInscreenState extends State<LogInscreen> {
               hint: "Enter your Password",
               controller: passwordController,
               inputType: TextInputType.visiblePassword,
-              isPassword: true,
               textInputAction: TextInputAction.done,
-
-
+              obscureText: _isObscured,
+              secondSuffixWidget: IconButton(
+                icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    _isObscured = !_isObscured; // Toggle password visibility
+                  });
+                },
+              ),
             ),
 
 

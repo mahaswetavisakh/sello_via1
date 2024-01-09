@@ -35,7 +35,7 @@ class _TopbarState extends State<Topbar> {
             ), // Name & Back Arrow
 
             const SizedBox(
-              width: 5,
+              width: 15,
             ),
             Text(widget.title!,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),

@@ -7,7 +7,7 @@ class Listing extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      bottomNavigationBar: Bottomnavwithicons(),
+
 
       body: Padding(
         padding: const EdgeInsets.all(15),

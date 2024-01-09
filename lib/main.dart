@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/screens/mainscreen.dart';
@@ -12,10 +13,13 @@ import 'package:sello_via/screens/orders.dart';
 import 'package:sello_via/screens/registerScreen.dart';
 import 'package:sello_via/screens/sidebar.dart';
 
+import 'logics/authLogics.dart';
+
 void main()async{
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Get.put(AuthLogics()); //changed
   runApp(
       MaterialApp(
           initialRoute:Routes.splashRoute,
@@ -30,7 +34,7 @@ void main()async{
             Routes.listingRoute:(context)=>Listing(),
             Routes.likedItemRoute:(context)=>LikedItem(),
         },
-//home:Listing(),
+//home:Myaccount(),
         debugShowCheckedModeBanner: false,
 
           )

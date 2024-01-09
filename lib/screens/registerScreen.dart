@@ -36,6 +36,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode _emailFocus = FocusNode();
   FocusNode _passwordFocus = FocusNode();
 
+  bool _isObscured = true;
+
  void  createAccount(BuildContext context){
    String name=nameController.text;
    String emailId=emailController.text;
@@ -70,6 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(email);
   }
+
 
 
   @override
@@ -162,9 +165,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               hint: "Enter your Password",
               controller: passwordController,
               inputType: TextInputType.visiblePassword,
-              isPassword: true,
               textInputAction: TextInputAction.done,
-              // Or provide the next focus if needed
+              obscureText: _isObscured,
+              secondSuffixWidget: IconButton(
+                icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    _isObscured = !_isObscured; // Toggle password visibility
+                  });
+                },
+              ),
             ),
             const SizedBox(
               height: 10,

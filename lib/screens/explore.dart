@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sello_via/models/product_model.dart';
 import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import '../main.dart';
@@ -71,11 +73,11 @@ class Explore extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Topbar("Explore"),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Search("Search"),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
     SizedBox(
@@ -91,10 +93,10 @@ class Explore extends StatelessWidget{
 
           children: [
             Container(
-              padding: EdgeInsets.only(left:20,right: 20,top:10,bottom:10),
+              padding: const EdgeInsets.only(left:20,right: 20,top:10,bottom:10),
               height:40,
               width: 80,
-              margin: EdgeInsets.only(right:10),
+              margin: const EdgeInsets.only(right:10),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
 
@@ -103,12 +105,12 @@ class Explore extends StatelessWidget{
                   borderRadius: BorderRadius.circular(23),
                 ),
               ),
-              child: Text("${listing[index].item}",style: TextStyle(
+              child: Text("${listing[index].item}",style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500
               ),),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
 
             ),
@@ -116,104 +118,119 @@ class Explore extends StatelessWidget{
         ],
     );
     },),),
-              Expanded(
-                child: ListView.builder(
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("products").snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                  if(snapshot.hasData){
 
-                  itemCount: details.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Column(
-                        children: [
-                          ListTile(
-                            title: Text('${details[index].title}',style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),),
-                            subtitle: Text('${details[index].subtitle}',style: TextStyle(
-                              fontWeight: FontWeight.w500
-                            ),),
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  '${details[index].profile}'
-                              ),
-                            ),
-                            trailing: Icon(Icons.more_vert_outlined),
-                          ),
-                          Container(
-                            width: 300,
-                            height: 300,
-                            color: Colors.transparent,
-                            child: Stack(
+                    List<ProductModel> products=[];
+                    for(QueryDocumentSnapshot value in snapshot.data!.docs){
+                      products.add(ProductModel.fromMap(value.data()));
+                    }
+
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: products.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            child: Column(
                               children: [
-                                Image.asset('${details[index].image}',fit: BoxFit.cover,height: 300,width:300,),
-
-                                Positioned(
-                                    bottom:15,
-                                    right:15,
-                                    child: Container(
-                                      height: 30,
-                                      width:30,
-                                      decoration: ShapeDecoration(
-                                        color: Colors.black12,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(100),
-                                        ),
-                                      ),
-
-                                      child: Icon(Icons.favorite_outline,color: Colors.red,),
-                                    ))
-                              ],
-                            ),
-                          ),
-
-                           Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('${details[index].item}',style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.black87,
-                                    ),),
-                                    Row(
-                                      children: [
-                                        Text('Make: ${details[index].make}',style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: Colors.black26,
-                                        ),),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text('| Year: ${details[index].year}',style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: Colors.black26,
-                                        ),),
-                                      ],
-                                    )
-                                  ],
+                                ListTile(
+                                  title: Text(products[index].name!,style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),),
+                                  subtitle: Text(snapshot.data!.docs[index].get("category"),style: const TextStyle(
+                                      fontWeight: FontWeight.w500
+                                  ),),
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        '${details[index].profile}'
+                                    ),
+                                  ),
+                                  trailing: const Icon(Icons.more_vert_outlined),
                                 ),
-                                Text('₹ ${details[index].price}',style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black87,
-                                ),),
-                                SizedBox(
-                                  height: 20,
-                                )
+                                Container(
+                                  width: 300,
+                                  height: 300,
+                                  color: Colors.transparent,
+                                  child: Stack(
+                                    children: [
+                                      Image.network(snapshot.data!.docs[index].get("images")[0],fit: BoxFit.cover,height: 300,width:300,),
+
+                                      Positioned(
+                                          bottom:15,
+                                          right:15,
+                                          child: Container(
+                                            height: 30,
+                                            width:30,
+                                            decoration: ShapeDecoration(
+                                              color: Colors.black12,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(100),
+                                              ),
+                                            ),
+
+                                            child: const Icon(Icons.favorite_outline,color: Colors.red,),
+                                          ))
+                                    ],
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${details[index].item}',style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black87,
+                                          ),),
+                                          Row(
+                                            children: [
+                                              Text('Make: ${details[index].make}',style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.black26,
+                                              ),),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text('| Year: ${details[index].year}',style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.black26,
+                                              ),),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      Text('₹ ${products[index].price}',style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black87,
+                                      ),),
+                                      const SizedBox(
+                                        height: 20,
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
+                  }else{
+                    return const CircularProgressIndicator();
+                  }
+
+                }
               ),
 
             ],

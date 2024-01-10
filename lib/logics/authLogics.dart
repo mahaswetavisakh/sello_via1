@@ -23,22 +23,19 @@ class AuthLogics extends GetxController{
 
   Future<void> logOut() async {
     _localDb.remove("user");
+    user=null;
   }
   login({required String email,required String password,
     required BuildContext context}){
     _auth.signInWithEmailAndPassword(
         email: email,
         password: password
-    ).then((UserCredential credential) {
+    ).then((UserCredential credential) async {
       
-      database.collection("users").doc(credential.user!.uid).get()
-          .then((value) async {
-            // TODO: add condition for value is no null
-
-            user=UserModel.getDataFromMap(value.data());
-            _localDb.write("user", user!.toMap());
-      });
-       Navigator.pushNamed(context, Routes.homeRoute);
+      DocumentSnapshot value=await database.collection("users").doc(credential.user!.uid).get();
+      user=UserModel.getDataFromMap(value.data());
+      _localDb.write("user", user!.toMap());
+      Get.toNamed(Routes.homeRoute);
     }).onError((FirebaseAuthException error, stackTrace) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -79,8 +76,13 @@ class AuthLogics extends GetxController{
 
 
   UserModel getUserData()  {
-    user=UserModel.getDataFromMap(_localDb.read("user",));
-    return user!;
+    if(_localDb.read("user",)!=null){
+      user=UserModel.getDataFromMap(_localDb.read("user",));
+      return user!;
+    }else{
+      return UserModel();
+    }
+
   }
 
 
@@ -109,11 +111,12 @@ class AuthLogics extends GetxController{
     user!.userprofileUrl=url;
     database.collection("users").doc(user!.userUID).update(user!.toMap());
     updateDataFromLocal();
-    print("UserData==${user!.userprofileUrl}");
+
   }
 
   updateDataFromLocal() async {
-    _localDb.write("user",user!.toMap());
+    await _localDb.write("user",user!.toMap());
+    getUserData();
     update();
   }
 }

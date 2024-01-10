@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sello_via/logics/category_logics.dart';
 import 'package:sello_via/logics/cloud_storage_logic.dart';
+import 'package:sello_via/models/category_model.dart';
 import '../appConts/routes.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
@@ -15,6 +18,9 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
 
+  final CategoryLogics _categoryLogics=Get.put(CategoryLogics());
+  CategoryModel? _selectedCategory;
+  List<CategoryModel> subCategories=[];
   CollectionReference product=FirebaseFirestore.instance.collection("product");
 
   List<String> urls=[];
@@ -35,8 +41,8 @@ class _AddProductState extends State<AddProduct> {
       'name':_productName.text,
       'price': _productPrice.text,
       'description':_productDescription.text,
-      'category': dropdownvalue,
-      'subcategory':dropdownvalue1,
+      'category': "dropdownvalue",
+      'subcategory':"dropdownvalue1",
       "images":urls
     };
     product.add(data);
@@ -63,11 +69,6 @@ class _AddProductState extends State<AddProduct> {
       Navigator.pushNamed(context, Routes.listingRoute);
     }
   }
-
-  String dropdownvalue = "category1";
-  List<String> items = ["category1", "category2", "category3"];
-  String dropdownvalue1 = "subcategory1";
-  List<String> items1 = ["subcategory1", "subcategory2", "subcategory3"];
 
 
 
@@ -156,18 +157,21 @@ class _AddProductState extends State<AddProduct> {
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      value: dropdownvalue,
+                      value: _selectedCategory,
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       underline: SizedBox(), // This removes the underline
-                      items: items.map((String item) {
+                      items: _categoryLogics.mainCategories.map((CategoryModel item) {
+                    print("dsfsd==${_categoryLogics.mainCategories.length}");
                         return DropdownMenuItem(
                           value: item,
-                          child: Text(item),
+                          child: Text(item.name!),
                         );
                       }).toList(),
-                      onChanged: (String? newValue) {
+                      onChanged: (CategoryModel? newValue) {
+                        _selectedCategory=newValue;
+                        subCategories=  _categoryLogics.getSubcategory(_selectedCategory!);
                         setState(() {
-                          dropdownvalue = newValue!;
+
                         });
                       },
                     ),
@@ -178,35 +182,35 @@ class _AddProductState extends State<AddProduct> {
                   height: 20,
                 ),
 
-                const Text("Product SubCategory:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                Container(
-                  height: 50,
-                  width: 500,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFFE1E1E1),
-                  ),
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: DropdownButtonHideUnderline(
-                    child:     DropdownButton(
-                      value: dropdownvalue1,
-                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                      items: items1.map((String items1) {
-                        return DropdownMenuItem(
-                          value: items1,
-                          child: Text(items1),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownvalue1 = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                // const Text("Product SubCategory:",
+                //     style:
+                //         TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                // Container(
+                //   height: 50,
+                //   width: 500,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(20),
+                //     color: const Color(0xFFE1E1E1),
+                //   ),
+                //   padding: const EdgeInsets.only(left: 20, right: 20),
+                //   child: DropdownButtonHideUnderline(
+                //     child:     DropdownButton(
+                //       value: dropdownvalue1,
+                //       icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                //       items: subCategories.map((String items1) {
+                //         return DropdownMenuItem(
+                //           value: items1,
+                //           child: Text(items1),
+                //         );
+                //       }).toList(),
+                //       onChanged: (String? newValue) {
+                //         setState(() {
+                //           dropdownvalue1 = newValue!;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
 
                 const Text("Product Image:",
                     style:

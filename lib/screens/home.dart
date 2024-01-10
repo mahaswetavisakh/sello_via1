@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final CollectionReference product = FirebaseFirestore.instance.collection(
       'product');
-  final AuthLogics _authLogics = Get.find();
+  final AuthLogics _authLogics = Get.put(AuthLogics());
 
   List<Itemdetails> details = [
     Itemdetails(
@@ -62,15 +62,17 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.centerLeft,
                         ),
 
-                        Text(
-                          _authLogics.getUserData()
-                              .userName!.toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 23,
-                          ),
-                        ),
+                        GetBuilder<AuthLogics>(builder: (logic) {
+                          print("my name==${ _authLogics.user!.userName!}");
+                          return Text(
+                            _authLogics.user!.userName!.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 23,
+                            ),
+                          );
+                        }),
 
                         const Text(
                           "Welcome back!",

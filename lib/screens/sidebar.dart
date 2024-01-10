@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sello_via/logics/authLogics.dart';
 import 'package:sello_via/widgets/Custombuttons.dart';
 
 import '../appConts/routes.dart';
@@ -157,6 +159,8 @@ class SideBar extends StatelessWidget{
                     onTap: (){
 
                         _auth.signOut();
+                        AuthLogics auth=Get.put(AuthLogics());
+                        auth.logOut();
                         Navigator.pushNamed(context, Routes.loginRoute);
 
                     },

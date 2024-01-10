@@ -14,6 +14,7 @@ import 'package:sello_via/screens/registerScreen.dart';
 import 'package:sello_via/screens/sidebar.dart';
 
 import 'logics/authLogics.dart';
+import 'logics/category_logics.dart';
 
 void main()async{
   await GetStorage.init();
@@ -21,7 +22,7 @@ void main()async{
   await Firebase.initializeApp();
   Get.put(AuthLogics()); //changed
   runApp(
-      MaterialApp(
+      GetMaterialApp(
           initialRoute:Routes.splashRoute,
           routes: {
             Routes.splashRoute:(context)=>SplashScreen(),
@@ -34,8 +35,13 @@ void main()async{
             Routes.listingRoute:(context)=>Listing(),
             Routes.likedItemRoute:(context)=>LikedItem(),
         },
-//home:Myaccount(),
         debugShowCheckedModeBanner: false,
+        onInit: (){
+            AuthLogics _auth=Get.put(AuthLogics());
+            CategoryLogics categoryLogics=Get.put(CategoryLogics());
+            categoryLogics.getCategoriesFromDb();
+            _auth.getUserData();
+        },
 
           )
   );

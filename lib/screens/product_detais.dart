@@ -36,8 +36,12 @@ class Productdetails extends StatelessWidget{
 
     ),
   ];
+  ProductModel? productData;
   @override
   Widget build(BuildContext context) {
+   Map argument= ModalRoute.of(context)!.settings.arguments as Map;
+   print("arg==$argument");
+   productData=argument['productData'];
     return  Scaffold(
       bottomNavigationBar: Bottomnavproduct("Add to Cart","Buy now"),
       body: ListView(
@@ -63,7 +67,7 @@ class Productdetails extends StatelessWidget{
                    width: 300,
                    height: 230,
                    color: Colors.transparent,
-                   child: Image.asset('assets/watch.png',fit: BoxFit.cover,height: 230,width:300,) ,
+                   child: Image.network(productData!.images![0],fit: BoxFit.cover,height: 230,width:300,) ,
                  ),
                  SizedBox(
                    height: 20,

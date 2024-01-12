@@ -8,6 +8,7 @@ import 'package:sello_via/logics/authLogics.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
 import '../widgets/customInput.dart';
+import '../widgets/product_list_item.dart';
 import '../widgets/profilepic.dart';
 
 class Home extends StatefulWidget {
@@ -18,7 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthLogics _authLogics = Get.put(AuthLogics());
 
-  bool isFavorite = false;
+
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -79,9 +80,8 @@ class _HomeState extends State<Home> {
               CustomInput(
                 hint: "Search",
                 controller: searchController,
-
                 firstSuffixWidget: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () {
 
                   },
@@ -136,132 +136,11 @@ class _HomeState extends State<Home> {
                               scrollDirection: Axis.horizontal,
                               itemCount: products.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            Routes.product_detailsRoute,
-
-                                          );
-
-
-                                        },
-                                        child: Container(
-                                          width: 250,
-                                          color: Colors.transparent,
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                  //height:300
-                                                  child: Image.network(
-                                                products[index].images![0],
-                                                fit: BoxFit.cover,
-                                                height: 230,
-                                                width: 250,
-                                              )),
-                                              Positioned(
-                                                  bottom: 15,
-                                                  right: 15,
-                                                  child: InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          isFavorite = !isFavorite;
-                                                        });
-                                                      },
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      decoration: ShapeDecoration(
-                                                        color: const Color(
-                                                            0x7EE0E0DF),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(100),
-                                                        ),
-                                                      ),
-                                                      child:  Icon(
-                                                        isFavorite ? Icons.favorite : Icons.favorite_outline,
-                                                        color: Colors.red,
-                                                      ),
-
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  products[index].name!,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: Colors.black87,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Posted Date: ${products[index].date!.substring(0, 10)}',
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        fontSize: 14,
-                                                        color:
-                                                            Color(0xFF7C035A),
-                                                      ),
-                                                    ),
-                                                    const Text(
-                                                      ' ',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        fontSize: 14,
-                                                        color:
-                                                            Color(0xFF7C035A),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 30,
-                                            ),
-                                            Text(
-                                              '₹ ${products[index].price}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                return ProductListItem(products[index]);
                               },
                             );
                           } else {
-                            return const CircularProgressIndicator();
+                            return const Center(child: CircularProgressIndicator());
                           }
                         }),
                   ),
@@ -310,123 +189,7 @@ class _HomeState extends State<Home> {
                               scrollDirection: Axis.horizontal,
                               itemCount: products.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(context,
-                                              Routes.product_detailsRoute);
-                                        },
-                                        child: Container(
-                                          width: 250,
-                                          color: Colors.transparent,
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                //height:300
-                                                  child: Image.network(
-                                                    products[index].images![0],
-                                                    fit: BoxFit.cover,
-                                                    height: 230,
-                                                    width: 250,
-                                                  )),
-                                              Positioned(
-                                                  bottom: 15,
-                                                  right: 15,
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        isFavorite = !isFavorite;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      decoration: ShapeDecoration(
-                                                        color: const Color(
-                                                            0x7EE0E0DF),
-                                                        shape:
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(100),
-                                                        ),
-                                                      ),
-                                                      child:  Icon(
-                                                        isFavorite ? Icons.favorite : Icons.favorite_outline,
-                                                        color: Colors.red,
-                                                      ),
-
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  products[index].name!,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: Colors.black87,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Posted Date: ${products[index].date!.substring(0, 10)}',
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w300,
-                                                        fontSize: 14,
-                                                        color:
-                                                        Color(0xFF7C035A),
-                                                      ),
-                                                    ),
-                                                    const Text(
-                                                      ' ',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w300,
-                                                        fontSize: 14,
-                                                        color:
-                                                        Color(0xFF7C035A),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 30,
-                                            ),
-                                            Text(
-                                              '₹ ${products[index].price}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                return ProductListItem(products[index]);
                               },
                             );
                           } else {

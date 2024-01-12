@@ -7,6 +7,8 @@ class Routes{
   static String sidebarRoute="/sidebar";
   static String orderRoute="/order";
   static String listingRoute="/listing";
-  static String likedItemRoute="/likedItem";
+  static String likedItemRoute="/likeditem";
+  static String product_detailsRoute="/product_details";
+
 
 }

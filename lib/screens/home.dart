@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/logics/authLogics.dart';
-import 'package:sello_via/widgets/custom_container.dart';
 
+
+import '../models/category_model.dart';
+import '../models/product_model.dart';
+import '../widgets/customInput.dart';
 import '../widgets/profilepic.dart';
 
 class Home extends StatefulWidget {
@@ -13,34 +16,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final CollectionReference product = FirebaseFirestore.instance.collection(
-      'product');
   final AuthLogics _authLogics = Get.put(AuthLogics());
 
-  List<Itemdetails> details = [
-    Itemdetails(
-        image: "assets/watch.png",
-        item: "Cordoba Watch",
-        year: "2021",
-        make: "Cordoba",
-        price: "20,000"),
-    Itemdetails(
-        image: "assets/guitar.png",
-        item: "Cordoba Mini Guitar",
-        year: "2023",
-        make: "Cordoba",
-        price: "25,000"),
-    Itemdetails(
-        image: "assets/book.png",
-        item: "Book",
-        year: "2020",
-        make: "Cordoba",
-        price: "2,000"),
-  ];
-
+  bool isFavorite = false;
+  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print("HELLO");
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -61,9 +43,8 @@ class _HomeState extends State<Home> {
                         const Align(
                           alignment: Alignment.centerLeft,
                         ),
-
                         GetBuilder<AuthLogics>(builder: (logic) {
-                          print("my name==${ _authLogics.user!.userName!}");
+                          print("my name==${_authLogics.user!.userName!}");
                           return Text(
                             _authLogics.user!.userName!.toString(),
                             style: const TextStyle(
@@ -73,7 +54,6 @@ class _HomeState extends State<Home> {
                             ),
                           );
                         }),
-
                         const Text(
                           "Welcome back!",
                           style: TextStyle(
@@ -96,7 +76,17 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 20,
               ),
-              Search("Search"),
+              CustomInput(
+                hint: "Search",
+                controller: searchController,
+
+                firstSuffixWidget: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+
+                  },
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -128,112 +118,152 @@ class _HomeState extends State<Home> {
                     height: 20,
                   ),
                   SizedBox(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.4,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: details.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 250,
-                                color: Colors.transparent,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      //height:300
-                                        child: Image.asset(
-                                          '${details[index].image}',
-                                          fit: BoxFit.cover,
-                                          height: 230,
-                                          width: 250,
-                                        )),
-                                    Positioned(
-                                        bottom: 15,
-                                        right: 15,
+                    height: MediaQuery.of(context).size.height * 0.4,
+
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("products")
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<ProductModel> products = [];
+                            for (QueryDocumentSnapshot value
+                                in snapshot.data!.docs) {
+                              products.add(ProductModel.fromMap(value.data()));
+                            }
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: products.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.product_detailsRoute,
+
+                                          );
+
+
+                                        },
                                         child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          decoration: ShapeDecoration(
-                                            color: const Color(0x7EE0E0DF),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(100),
-                                            ),
-                                          ),
-                                          child: const Icon(
-                                            Icons.favorite_outline,
-                                            color: Colors.red,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .start,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${details[index].item}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black87,
+                                          width: 250,
+                                          color: Colors.transparent,
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                  //height:300
+                                                  child: Image.network(
+                                                products[index].images![0],
+                                                fit: BoxFit.cover,
+                                                height: 230,
+                                                width: 250,
+                                              )),
+                                              Positioned(
+                                                  bottom: 15,
+                                                  right: 15,
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          isFavorite = !isFavorite;
+                                                        });
+                                                      },
+                                                    child: Container(
+                                                      height: 30,
+                                                      width: 30,
+                                                      decoration: ShapeDecoration(
+                                                        color: const Color(
+                                                            0x7EE0E0DF),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(100),
+                                                        ),
+                                                      ),
+                                                      child:  Icon(
+                                                        isFavorite ? Icons.favorite : Icons.favorite_outline,
+                                                        color: Colors.red,
+                                                      ),
+
+                                                    ),
+                                                  ))
+                                            ],
                                           ),
                                         ),
-                                        Row(
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              '${details[index].year}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 14,
-                                                color: Color(0xFF7C035A),
-                                              ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  products[index].name!,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Posted Date: ${products[index].date!.substring(0, 10)}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xFF7C035A),
+                                                      ),
+                                                    ),
+                                                    const Text(
+                                                      ' ',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xFF7C035A),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 30,
                                             ),
                                             Text(
-                                              ' | ${details[index].make}',
+                                              '₹ ${products[index].price}',
                                               style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 14,
-                                                color: Color(0xFF7C035A),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.black87,
                                               ),
                                             ),
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    Text(
-                                      '₹ ${details[index].price}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black87,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        }),
                   ),
                   const SizedBox(
                     height: 20,
@@ -263,111 +293,146 @@ class _HomeState extends State<Home> {
                     height: 20,
                   ),
                   SizedBox(
-                    height: 300,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: details.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 250,
-                                height: 230,
-                                color: Colors.transparent,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      //height:300
-                                        child: Image.asset(
-                                          '${details[index].image}',
-                                          fit: BoxFit.cover,
-                                          height: 230,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("products")
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<ProductModel> products = [];
+                            for (QueryDocumentSnapshot value
+                            in snapshot.data!.docs) {
+                              products.add(ProductModel.fromMap(value.data()));
+                            }
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: products.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(context,
+                                              Routes.product_detailsRoute);
+                                        },
+                                        child: Container(
                                           width: 250,
-                                        )),
-                                    Positioned(
-                                      bottom: 15,
-                                      right: 15,
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: ShapeDecoration(
-                                          color: const Color(0x7EE0E0DF),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(100),
+                                          color: Colors.transparent,
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                //height:300
+                                                  child: Image.network(
+                                                    products[index].images![0],
+                                                    fit: BoxFit.cover,
+                                                    height: 230,
+                                                    width: 250,
+                                                  )),
+                                              Positioned(
+                                                  bottom: 15,
+                                                  right: 15,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isFavorite = !isFavorite;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height: 30,
+                                                      width: 30,
+                                                      decoration: ShapeDecoration(
+                                                        color: const Color(
+                                                            0x7EE0E0DF),
+                                                        shape:
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(100),
+                                                        ),
+                                                      ),
+                                                      child:  Icon(
+                                                        isFavorite ? Icons.favorite : Icons.favorite_outline,
+                                                        color: Colors.red,
+                                                      ),
+
+                                                    ),
+                                                  ))
+                                            ],
                                           ),
-                                        ),
-                                        child: const Icon(
-                                          Icons.favorite_outline,
-                                          color: Colors.red,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .start,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${details[index].item}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        Row(
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              '${details[index].year}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 14,
-                                                color: Color(0xFF7C035A),
-                                              ),
+                                            Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  products[index].name!,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Posted Date: ${products[index].date!.substring(0, 10)}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.w300,
+                                                        fontSize: 14,
+                                                        color:
+                                                        Color(0xFF7C035A),
+                                                      ),
+                                                    ),
+                                                    const Text(
+                                                      ' ',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.w300,
+                                                        fontSize: 14,
+                                                        color:
+                                                        Color(0xFF7C035A),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 30,
                                             ),
                                             Text(
-                                              ' | ${details[index].make}',
+                                              '₹ ${products[index].price}',
                                               style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 14,
-                                                color: Color(0xFF7C035A),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.black87,
                                               ),
                                             ),
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    Text(
-                                      '₹ ${details[index].price}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black87,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        }),
                   ),
                 ],
               ),
@@ -379,12 +444,4 @@ class _HomeState extends State<Home> {
   }
 }
 
-class Itemdetails {
-  String? image;
-  String? item;
-  String? year;
-  String? make;
-  String? price;
 
-  Itemdetails({this.image, this.item, this.year, this.make, this.price});
-}

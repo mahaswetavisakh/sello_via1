@@ -87,18 +87,8 @@ class _AddProductState extends State<AddProduct> {
                   hint: "Please Enter Your Product Description",
                   controller: _productDescription,
                   textInputAction: TextInputAction.done,
-                  firstSuffixWidget: IconButton(
-                    icon: Icon(Icons.edit), // Replace with your edit icon
-                    onPressed: () {
 
-                    },
-                  ),
-                  secondSuffixWidget: IconButton(
-                    icon: Icon(Icons.delete), // Replace with your delete icon
-                    onPressed: () {
-                      
-                    },
-                  ),
+
                 ),
 
                 const SizedBox(
@@ -119,9 +109,9 @@ class _AddProductState extends State<AddProduct> {
                     child: DropdownButton(
                       value: _selectedCategory,
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                      underline: SizedBox(), // This removes the underline
+                      underline: SizedBox(),
                       items: _categoryLogics.mainCategories.map((CategoryModel item) {
-                    print("dsfsd==${_categoryLogics.mainCategories.length}");
+                    //print("dsfsd==${_categoryLogics.mainCategories.length}");
                         return DropdownMenuItem(
                           value: item,
                           child: Text(item.name!),
@@ -266,7 +256,7 @@ class _AddProductState extends State<AddProduct> {
                       subCategory: _selectedSubCategory!.id,
                       images: _img
                     );
-                   Navigator.pop(context);
+                    Navigator.pushNamed(context, Routes.listingRoute);
                   },
                 ),
 

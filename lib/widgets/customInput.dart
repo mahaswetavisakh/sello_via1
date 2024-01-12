@@ -7,8 +7,7 @@ class CustomInput extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? inputType;
   final Widget? firstSuffixWidget;
-  final Widget? secondSuffixWidget;
-  final TextInputAction textInputAction;
+  final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
   final bool obscureText;
 
@@ -18,8 +17,7 @@ class CustomInput extends StatefulWidget {
     this.readOnly = false,
     this.inputType,
     this.firstSuffixWidget,
-    this.secondSuffixWidget,
-    required this.textInputAction,
+    this.textInputAction,
     this.onSubmitted,
     this.obscureText = false,
 
@@ -62,7 +60,7 @@ class _CustomInputState extends State<CustomInput> {
             ),
           ),
           if (widget.firstSuffixWidget != null) widget.firstSuffixWidget!,
-          if (widget.secondSuffixWidget != null) widget.secondSuffixWidget!,
+
         ],
       ),
     );

@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../appConts/routes.dart';
+
 
 class Topbar extends StatefulWidget {
   String? title;
@@ -28,10 +30,11 @@ class _TopbarState extends State<Topbar> {
                   color: const Color(0xFF5E5E5E),
                 ),
               ),
-              child: const Icon(
+              child:  IconButton(
+               icon:Icon(
                 Icons.arrow_back_ios_outlined,
                 size: 18,
-              ),
+              ), onPressed: () {    },),
             ), // Name & Back Arrow
 
             const SizedBox(
@@ -43,10 +46,11 @@ class _TopbarState extends State<Topbar> {
         ),
 
 
-        const Icon(
+        IconButton(
+        icon: Icon(
           Icons.menu,
           size: 30,
-        ),
+        ), onPressed: () { Navigator.pushNamed(context, Routes.sidebarRoute); },),
       ],
     );
   }

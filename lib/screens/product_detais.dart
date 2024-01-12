@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/widgets/custombuttons.dart';
 import 'package:sello_via/widgets/navbar.dart';
 
+import '../appConts/routes.dart';
+import '../models/product_model.dart';
+
 class Productdetails extends StatelessWidget{
+  bool isFavorite = false;
   List<Itemdetails> details = [
     Itemdetails(
 
@@ -34,7 +39,7 @@ class Productdetails extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      bottomNavigationBar: Bottomnavproduct("Save item","Buy now"),
+      bottomNavigationBar: Bottomnavproduct("Add to Cart","Buy now"),
       body: ListView(
         children: [
           Padding(
@@ -168,90 +173,146 @@ class Productdetails extends StatelessWidget{
                    height: 5,
                  ),
                  SizedBox(
-                   height:300,
-                   child: ListView.builder(
-                     scrollDirection: Axis.horizontal,
-                     itemCount: details.length,
-                     itemBuilder: (BuildContext context, int index) {
-                       return Card(
-                         child: Column(
-                           children: [
+                   height: MediaQuery.of(context).size.height * 0.4,
+                   child: StreamBuilder<QuerySnapshot>(
+                       stream: FirebaseFirestore.instance
+                           .collection("products")
+                           .snapshots(),
+                       builder: (context,
+                           AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                         if (snapshot.hasData) {
+                           List<ProductModel> products = [];
+                           for (QueryDocumentSnapshot value
+                           in snapshot.data!.docs) {
+                             products.add(ProductModel.fromMap(value.data()));
+                           }
+                           return ListView.builder(
+                             scrollDirection: Axis.horizontal,
+                             itemCount: products.length,
+                             itemBuilder: (BuildContext context, int index) {
+                               return Card(
+                                 child: Column(
+                                   children: [
+                                     InkWell(
+                                       onTap: () {
+                                         Navigator.pushNamed(context,
+                                             Routes.product_detailsRoute);
+                                       },
+                                       child: Container(
+                                         width: 250,
+                                         color: Colors.transparent,
+                                         child: Stack(
+                                           children: [
+                                             Container(
+                                               //height:300
+                                                 child: Image.network(
+                                                   products[index].images![0],
+                                                   fit: BoxFit.cover,
+                                                   height: 230,
+                                                   width: 250,
+                                                 )),
+                                             Positioned(
+                                                 bottom: 15,
+                                                 right: 15,
+                                                 child: InkWell(
+                                                   onTap: () {
+                                                     // setState(() {
+                                                     //   isFavorite = !isFavorite;
+                                                     // });
+                                                   },
+                                                   child: Container(
+                                                     height: 30,
+                                                     width: 30,
+                                                     decoration: ShapeDecoration(
+                                                       color: const Color(
+                                                           0x7EE0E0DF),
+                                                       shape:
+                                                       RoundedRectangleBorder(
+                                                         borderRadius:
+                                                         BorderRadius
+                                                             .circular(100),
+                                                       ),
+                                                     ),
+                                                     child:  Icon(
+                                                       isFavorite ? Icons.favorite : Icons.favorite_outline,
+                                                       color: Colors.red,
+                                                     ),
 
-                             Container(
-                               width: 250,
-                               height: 230,
-                               color: Colors.transparent,
-                               child: Stack(
-                                 children: [
-                                   Container(
-                                     //height:300
-                                       child: Image.asset('${details[index].image}',fit: BoxFit.cover,height: 230,width:250,)),
-                                   Positioned(
-                                     bottom:15,
-                                     right:15,
-                                     child: Container(
-                                       height: 30,
-                                       width:30,
-                                       decoration: ShapeDecoration(
-                                         color: Color(0x7EE0E0DF),
-                                         shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(100),
+                                                   ),
+                                                 ))
+                                           ],
                                          ),
                                        ),
-
-                                       child: Icon(Icons.favorite_outline,color: Colors.red,),
-                                     ),),
-                                 ],
-                               ),
-                             ),
-
-                             Padding(
-                               padding: EdgeInsets.all(10.0),
-                               child: Row(
-                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                 children: [
-                                   Column(
-                                     mainAxisAlignment: MainAxisAlignment.start,
-                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                     children: [
-                                       Text('${details[index].item}',style: TextStyle(
-                                         fontWeight: FontWeight.bold,
-                                         fontSize: 16,
-                                         color: Colors.black87,
-                                       ),),
-                                       Row(
+                                     ),
+                                     Padding(
+                                       padding: const EdgeInsets.all(10.0),
+                                       child: Row(
+                                         mainAxisAlignment:
+                                         MainAxisAlignment.spaceBetween,
                                          children: [
-                                           Text('${details[index].year}',style: TextStyle(
-                                             fontWeight: FontWeight.w300,
-                                             fontSize: 14,
-                                             color: Color(0xFF7C035A),
-                                           ),),
-
-                                           Text(' | ${details[index].make}',style: TextStyle(
-                                             fontWeight: FontWeight.w300,
-                                             fontSize: 14,
-                                             color: Color(0xFF7C035A),
-                                           ),),
+                                           Column(
+                                             mainAxisAlignment:
+                                             MainAxisAlignment.start,
+                                             crossAxisAlignment:
+                                             CrossAxisAlignment.start,
+                                             children: [
+                                               Text(
+                                                 products[index].name!,
+                                                 style: const TextStyle(
+                                                   fontWeight: FontWeight.bold,
+                                                   fontSize: 16,
+                                                   color: Colors.black87,
+                                                 ),
+                                               ),
+                                               Row(
+                                                 children: [
+                                                   Text(
+                                                     'Posted Date: ${products[index].date!.substring(0, 10)}',
+                                                     style: const TextStyle(
+                                                       fontWeight:
+                                                       FontWeight.w300,
+                                                       fontSize: 14,
+                                                       color:
+                                                       Color(0xFF7C035A),
+                                                     ),
+                                                   ),
+                                                   const Text(
+                                                     ' ',
+                                                     style: TextStyle(
+                                                       fontWeight:
+                                                       FontWeight.w300,
+                                                       fontSize: 14,
+                                                       color:
+                                                       Color(0xFF7C035A),
+                                                     ),
+                                                   ),
+                                                 ],
+                                               )
+                                             ],
+                                           ),
+                                           const SizedBox(
+                                             width: 30,
+                                           ),
+                                           Text(
+                                             '₹ ${products[index].price}',
+                                             style: const TextStyle(
+                                               fontWeight: FontWeight.bold,
+                                               fontSize: 18,
+                                               color: Colors.black87,
+                                             ),
+                                           ),
                                          ],
-                                       )
-                                     ],
-                                   ),
-                                   SizedBox(
-                                     width: 30,
-                                   ),
-                                   Text('₹ ${details[index].price}',style: TextStyle(
-                                     fontWeight: FontWeight.bold,
-                                     fontSize: 18,
-                                     color: Colors.black87,
-                                   ),),
-                                 ],
-                               ),
-                             ),
-                           ],
-                         ),
-                       );
-                     },
-                   ),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               );
+                             },
+                           );
+                         } else {
+                           return const CircularProgressIndicator();
+                         }
+                       }),
                  ),
 
                ],  ),

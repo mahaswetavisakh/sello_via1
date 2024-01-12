@@ -163,7 +163,7 @@ class ListingButtons extends StatelessWidget{
                         fontFamily: 'Arial',
                         fontWeight: FontWeight.w500,
                       ),),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Text(datetext!,style: const TextStyle(

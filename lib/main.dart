@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/screens/mainscreen.dart';
+import 'package:sello_via/screens/product_detais.dart';
 import 'package:sello_via/screens/splash_screen.dart';
 import 'package:sello_via/screens/login.dart';
 import 'package:sello_via/screens/Profilepage.dart';
@@ -34,6 +35,7 @@ void main()async{
             Routes.orderRoute:(context)=>Orders(),
             Routes.listingRoute:(context)=>Listing(),
             Routes.likedItemRoute:(context)=>LikedItem(),
+            Routes.product_detailsRoute:(context)=>Productdetails(),
         },
         debugShowCheckedModeBanner: false,
         onInit: (){

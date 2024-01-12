@@ -167,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               inputType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.done,
               obscureText: _isObscured,
-              secondSuffixWidget: IconButton(
+              firstSuffixWidget: IconButton(
                 icon: Icon(_isObscured ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
                   setState(() {

@@ -54,6 +54,12 @@ class SideBar extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("SelloVia", style: TextStyle(fontWeight: FontWeight.bold,fontSize:25)),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close, size: 35),
+                  ),
 
                 ],
               ),

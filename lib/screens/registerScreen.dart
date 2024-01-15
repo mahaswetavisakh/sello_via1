@@ -2,7 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/logics/authLogics.dart';
-import 'package:sello_via/widgets/custombuttons.dart';
+import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import '../appConts/routes.dart';
 import '../widgets/custom_button.dart';

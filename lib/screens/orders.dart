@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sello_via/widgets/Custombuttons.dart';
+import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
 
 class Orders extends StatelessWidget{
@@ -53,112 +53,114 @@ class Orders extends StatelessWidget{
     return  Scaffold(
 
 
-      body: Padding(
-        padding: const EdgeInsets.only(left:20,right: 20,bottom: 40,top: 70),
-        child: Column(
-          children: [
-            Topbar("My Orders"),
-            SizedBox(
-              height: 5,
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Topbar("My Orders"),
+              SizedBox(
+                height: 5,
+              ),
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: orders.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Stack(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        width: 300,
-                        height: 100,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFD4E4E6),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 75,
-                                width: 75,
-
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(13),
-                                  child: Image.asset("${orders[index].image}",fit: BoxFit.fill,),
-                                ),
-                              ),
-                              const SizedBox(width: 14,),
-                              Column(
-
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-
-                                  Text("${orders[index].maintext}",style:const  TextStyle(
-                                    color: Color(0xFF5E5E5E),
-                                    fontSize: 15,
-                                    fontFamily: 'Fira Sans',
-                                    fontWeight: FontWeight.w500,
-                                  ),),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text("${orders[index].datetext}",style:const  TextStyle(
-                                    color: Color(0xCB5E5E5E),
-                                    fontSize: 15,
-                                    fontFamily: 'Fira Sans',
-                                    fontWeight: FontWeight.w400,
-                                  ),),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text("₹ ${orders[index].pricetext}",style: const TextStyle(
-                                    color: Color(0xFF5E5E5E),
-                                    fontSize: 13,
-                                    fontFamily: 'Arial',
-                                    fontWeight: FontWeight.bold,
-                                  ),),
-
-                                ],
-                              ),
-
-
-
-
-                            ],
-                          ),
-                        ),
-
-
-                      ),
-                      Positioned(
-                        bottom:20,
-                        right: 20,
-                        child: Container(
-
-                          height: 25,
-                          width: 75,
+              Expanded(
+                child: ListView.builder(
+                  itemCount: orders.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          width: 300,
+                          height: 100,
                           decoration: ShapeDecoration(
-                            color: Colors.black,
+                            color: Color(0xFFD4E4E6),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
-                          child: Center(
-                            child: Text("Rate now", style: TextStyle(color: Colors.white)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 75,
+                                  width: 75,
+
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(13),
+                                    child: Image.asset("${orders[index].image}",fit: BoxFit.fill,),
+                                  ),
+                                ),
+                                const SizedBox(width: 14,),
+                                Column(
+
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+
+                                    Text("${orders[index].maintext}",style:const  TextStyle(
+                                      color: Color(0xFF5E5E5E),
+                                      fontSize: 15,
+                                      fontFamily: 'Fira Sans',
+                                      fontWeight: FontWeight.w500,
+                                    ),),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text("${orders[index].datetext}",style:const  TextStyle(
+                                      color: Color(0xCB5E5E5E),
+                                      fontSize: 15,
+                                      fontFamily: 'Fira Sans',
+                                      fontWeight: FontWeight.w400,
+                                    ),),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text("₹ ${orders[index].pricetext}",style: const TextStyle(
+                                      color: Color(0xFF5E5E5E),
+                                      fontSize: 13,
+                                      fontFamily: 'Arial',
+                                      fontWeight: FontWeight.bold,
+                                    ),),
+
+                                  ],
+                                ),
+
+
+
+
+                              ],
+                            ),
+                          ),
+
+
+                        ),
+                        Positioned(
+                          bottom:20,
+                          right: 30,
+                          child: Container(
+
+                            height: 25,
+                            width: 75,
+                            decoration: ShapeDecoration(
+                              color: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text("Rate now", style: TextStyle(color: Colors.white)),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

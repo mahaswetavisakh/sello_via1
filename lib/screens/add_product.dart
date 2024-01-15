@@ -70,6 +70,7 @@ class _AddProductState extends State<AddProduct> {
                 CustomInput(
                   hint: "Please Enter Your Product Price",
                   controller: _productPrice,
+                  inputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   onSubmitted: (_) {
                     FocusScope.of(context).nextFocus();

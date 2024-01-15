@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sello_via/logics/authLogics.dart';
-import 'package:sello_via/widgets/Custombuttons.dart';
+import 'package:sello_via/widgets/custom_container.dart';
 
 import '../appConts/routes.dart';
 
@@ -26,9 +26,9 @@ class SideBar extends StatelessWidget{
       childtext: "View your product listing for sale",
     ),
     Account(
-      icon:Icons.favorite_outline,
-      maintext: "Liked Items",
-      childtext: "See the products you have wishlisted",
+      icon:Icons.shopping_cart_outlined,
+      maintext: "My Cart",
+      childtext: "See the products added to the cart",
     ),
     
   ];

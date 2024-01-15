@@ -10,6 +10,7 @@ class CustomInput extends StatefulWidget {
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
   final bool obscureText;
+  final bool autoFocus;
 
   CustomInput({
     this.hint,
@@ -20,6 +21,7 @@ class CustomInput extends StatefulWidget {
     this.textInputAction,
     this.onSubmitted,
     this.obscureText = false,
+    this.autoFocus = false,
 
   });
 
@@ -47,7 +49,7 @@ class _CustomInputState extends State<CustomInput> {
 
               readOnly: widget.readOnly,
               controller: widget.controller,
-              autofocus: true,
+              autofocus: widget.autoFocus,
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               decoration: InputDecoration(
@@ -66,3 +68,4 @@ class _CustomInputState extends State<CustomInput> {
     );
   }
 }
+

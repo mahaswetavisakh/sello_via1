@@ -43,137 +43,139 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      body: Padding(
-        padding: const EdgeInsets.only(left:20,right: 20,bottom: 40,top: 70),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Topbar("Messages"),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomInput(
-                  hint: "Search",
-                  controller: searchController,
-
-                  firstSuffixWidget: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-
-                    },
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Topbar("Messages", showBackArrow: false),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: users.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Stack(
-                        children: [
-                          InkWell(
-                            onTap:(){
+                  CustomInput(
+                    hint: "Search",
+                    controller: searchController,
 
-                            },
+                    firstSuffixWidget: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
 
-                            child: Container(
-                              height:90,
-                              margin: EdgeInsets.all(5),
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(13),
-                                color: Colors.white,
-                              ),
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: users.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Stack(
+                          children: [
+                            InkWell(
+                              onTap:(){
 
-                              child: Row(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage('${users[index].image}'),
-                                        radius: 25,
-                                      ),
-                                      Positioned(
-                                        bottom: 6,
-                                        right: 0,
-                                        child: Container(
-                                          width: 10, // Adjust the size of the small circle as needed
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.green, // Change the color of the small circle
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              },
 
-                                  SizedBox(width: 8.0),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Container(
+                                height:90,
+                                margin: EdgeInsets.all(5),
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13),
+                                  color: Colors.white,
+                                ),
+
+                                child: Row(
+                                  children: [
+                                    Stack(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "${users[index].name}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15.0,
-                                              ),
-                                            ),
-
-                                            Text(
-                                              " | ${users[index].name2}",
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.grey,
-                                                fontSize: 15.0,
-                                              ),
-                                            ),
-                                          ],
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage('${users[index].image}'),
+                                          radius: 25,
                                         ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-
-                                        Text(
-                                          "${users[index].details}",
-                                          style: TextStyle(
-                                            fontSize: 13.0,
-                                            color: Colors.grey,
+                                        Positioned(
+                                          bottom: 6,
+                                          right: 0,
+                                          child: Container(
+                                            width: 10, // Adjust the size of the small circle as needed
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.green, // Change the color of the small circle
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
 
-                                ],
+                                    SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "${users[index].name}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+
+                                              Text(
+                                                " | ${users[index].name2}",
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+
+                                          Text(
+                                            "${users[index].details}",
+                                            style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            bottom:20,
-                            right:20,
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text( "${users[index].date}",style: TextStyle(color: Colors.black26),),
-                                Text( " ${users[index].time}",style: TextStyle(color: Colors.black26),),
-                              ],
-                            ), ),
-                        ],
-                      );
-                    },
+                            Positioned(
+                              bottom:20,
+                              right:20,
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text( "${users[index].date}",style: TextStyle(color: Colors.black26),),
+                                  Text( " ${users[index].time}",style: TextStyle(color: Colors.black26),),
+                                ],
+                              ), ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

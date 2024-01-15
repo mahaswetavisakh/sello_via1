@@ -654,7 +654,7 @@ class OrderButtons extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: 320,
       height: 110,
       decoration: ShapeDecoration(
         color: Color(0xFFD4E4E6),

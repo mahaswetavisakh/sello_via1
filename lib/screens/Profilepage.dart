@@ -83,6 +83,9 @@ class _ProfilepageState extends State<Profilepage> {
           child: ListView(
             children: [
               appBar(),
+              SizedBox(
+                height: 20,
+              ),
               const Text(
                 "Name:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -94,7 +97,7 @@ class _ProfilepageState extends State<Profilepage> {
                 onSubmitted: (_) {
                   FocusScope.of(context).nextFocus();
                 },
-
+                autoFocus: true,
               ),
               const SizedBox(
                 height: 12,
@@ -111,6 +114,7 @@ class _ProfilepageState extends State<Profilepage> {
                 onSubmitted: (_) {
                   FocusScope.of(context).nextFocus();
                 },
+                autoFocus: true,
               ),
               const SizedBox(
                 height: 12,
@@ -127,6 +131,7 @@ class _ProfilepageState extends State<Profilepage> {
                 onSubmitted: (_) {
                   FocusScope.of(context).nextFocus();
                 },
+                autoFocus: true,
 
 
               ),
@@ -141,6 +146,7 @@ class _ProfilepageState extends State<Profilepage> {
                 hint: "Enter your Address",
                 controller: _addressController,
                 textInputAction: TextInputAction.done,
+                autoFocus: true,
               ),
               const SizedBox(
                 height: 12,

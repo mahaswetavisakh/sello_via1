@@ -83,9 +83,9 @@ class _HomeState extends State<Home> {
                 firstSuffixWidget: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
-
                   },
                 ),
+                autoFocus: false,
               ),
               const SizedBox(
                 height: 20,
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> {
                               },
                             );
                           } else {
-                            return const CircularProgressIndicator();
+                            return Center(child: const CircularProgressIndicator());
                           }
                         }),
                   ),

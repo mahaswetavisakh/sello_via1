@@ -4,53 +4,49 @@ import 'package:flutter/material.dart';
 import '../appConts/routes.dart';
 
 
-class Topbar extends StatefulWidget {
+class Topbar extends StatelessWidget {
   String? title;
+  bool showBackArrow;
 
-  Topbar(String titletext) {
+  Topbar(String titletext, {this.showBackArrow = true}) {
     title = titletext;
   }
 
-  @override
-  State<Topbar> createState() => _TopbarState();
-}
-
-class _TopbarState extends State<Topbar> {
   Widget build(BuildContext context) {
     return Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFF5E5E5E),
+            if (showBackArrow)
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color(0xFF5E5E5E),
+                  ),
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios_outlined,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-              child:  IconButton(
-               icon:Icon(
-                Icons.arrow_back_ios_outlined,
-                size: 18,
-              ), onPressed: () {    },),
-            ), // Name & Back Arrow
-
             const SizedBox(
               width: 15,
             ),
-            Text(widget.title!,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+            Text(
+              title!,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
           ],
         ),
 
-
-        IconButton(
-        icon: Icon(
-          Icons.menu,
-          size: 30,
-        ), onPressed: () { Navigator.pushNamed(context, Routes.sidebarRoute); },),
       ],
     );
   }
@@ -62,12 +58,20 @@ class Topbarlogin extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(),
           ),
-          child: const Icon(Icons.arrow_back_ios_outlined),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_outlined,
+              size: 18,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ), // Name & Back Arrow
 
         const Text("SelloVia",
@@ -85,17 +89,31 @@ class Bottomnav extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      alignment: Alignment.center,
-      color: const Color(0xFFF5675B),
-      child: Text(
-        navtext!,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 23,
-          fontFamily: 'Fira Sans',
-          fontWeight: FontWeight.bold,
+    return GestureDetector(
+        onTap: () {
+      // Navigate to the next page
+      if (navtext == "Proceed to payment") {
+        Navigator.pushNamed(context, Routes.paymentRoute);
+
+      } else if (navtext == "Pay now") {
+        Navigator.pushNamed(context, Routes.orderconfirmationRoute);
+      }
+      else if (navtext == "Go to Home") {
+        Navigator.pushNamed(context, Routes.homeRoute);
+      }
+      },
+      child: Container(
+        height: 70,
+        alignment: Alignment.center,
+        color: const Color(0xFFF5675B),
+        child: Text(
+          navtext!,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 23,
+            fontFamily: 'Fira Sans',
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -115,33 +133,43 @@ class Bottomnavproduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          height: 70,
-          width: 180,
-          alignment: Alignment.center,
-          color: const Color(0xFF676563),
-          child: Text(
-            navtext1!,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 23,
-              fontFamily: 'Fira Sans',
-              fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, Routes.add_to_cartRoute);
+          },
+          child: Container(
+            height: 70,
+            width: 180,
+            alignment: Alignment.center,
+            color: const Color(0xFF676563),
+            child: Text(
+              navtext1!,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 23,
+                fontFamily: 'Fira Sans',
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-        Container(
-          width: 180,
-          height: 70,
-          alignment: Alignment.center,
-          color: const Color(0xFFF5675B),
-          child: Text(
-            navtext2!,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 23,
-              fontFamily: 'Fira Sans',
-              fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, Routes.purchaseformRoute);
+          },
+          child: Container(
+            width: 180,
+            height: 70,
+            alignment: Alignment.center,
+            color: const Color(0xFFF5675B),
+            child: Text(
+              navtext2!,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 23,
+                fontFamily: 'Fira Sans',
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

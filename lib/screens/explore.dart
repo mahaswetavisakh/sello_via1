@@ -29,7 +29,7 @@ class Explore extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Topbar("Explore"),
+              Topbar("Explore", showBackArrow: false),
               const SizedBox(
                 height: 20,
               ),
@@ -43,6 +43,7 @@ class Explore extends StatelessWidget {
 
                   },
                 ),
+                autoFocus: false,
               ),
               const SizedBox(
                 height: 20,

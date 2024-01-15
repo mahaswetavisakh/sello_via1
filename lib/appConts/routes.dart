@@ -9,6 +9,11 @@ class Routes{
   static String listingRoute="/listing";
   static String likedItemRoute="/likeditem";
   static String product_detailsRoute="/product_details";
+  static String add_to_cartRoute="/add_to_cart";
+  static String purchaseformRoute="/purchaseform";
+  static String paymentRoute="/payment";
+  static String orderconfirmationRoute="/orderconfirmation";
+  static String message_roomRoute="/message_room";
 
 
 }

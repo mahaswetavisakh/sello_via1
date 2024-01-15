@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sello_via/widgets/Custombuttons.dart';
+import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
 
 class LikedItem extends StatelessWidget{
@@ -58,7 +58,7 @@ class LikedItem extends StatelessWidget{
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              Topbar("Liked items"),
+              Topbar("Liked items", showBackArrow: false),
               SizedBox(
                 height: 5,
               ),

@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sello_via/logics/product_logic.dart';
 
 import '../appConts/routes.dart';
 import '../models/product_model.dart';
 
 class ProductListItem extends StatelessWidget{
-
+  final ProductLogic _productLogic=Get.put(ProductLogic());
   ProductModel product;
   ProductListItem(this.product);
   @override
@@ -24,6 +26,7 @@ class ProductListItem extends StatelessWidget{
                 }
               );
 
+              _productLogic.addProductToRecentlyViewed(product);
 
             },
             child: Container(

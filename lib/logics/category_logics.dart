@@ -37,4 +37,15 @@ class CategoryLogics extends GetxController{
     return data;
   }
 
+ String? getCategoryNameFromCategoryId(String categoryId){
+   print("Passed Value=${categoryId}  : ${mainCategories.length}");
+    for (CategoryModel value in mainCategories) {
+
+      if(value.id==categoryId){
+        return value.name;
+      }
+    }
+    return "";
+  }
+
 }

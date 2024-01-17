@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sello_via/logics/authLogics.dart';
 
@@ -10,6 +11,8 @@ import 'cloud_storage_logic.dart';
 
 class ProductLogic extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  List<ProductModel> recentlyViewedProducts=[];
+  final GetStorage _localDb = GetStorage();
   final AuthLogics _authLogics = Get.put(AuthLogics());
 
   Future createProduct(
@@ -66,5 +69,29 @@ class ProductLogic extends GetxController {
           .doc(documentReference.id)
           .update({"id": documentReference.id});
     }
+  }
+
+
+  addProductToRecentlyViewed(ProductModel product) async {
+    for (ProductModel value in recentlyViewedProducts.toList()) {
+      if(value.id==product.id){
+         recentlyViewedProducts.removeAt(recentlyViewedProducts.indexOf(product));
+      }
+    }
+    recentlyViewedProducts.add(product);
+
+    // add code for push recentlyViewedProducts variable to local db
+    List data=recentlyViewedProducts.map((e) => e.toMap()).toList();
+    await _localDb.write("viewedProducts", data);
+    update();
+  }
+
+  getViewedProducts(){
+   List data= _localDb.read("viewedProducts")??[];
+   if(data.isNotEmpty){
+     recentlyViewedProducts=data.map((e) => ProductModel.fromMap(e)).toList();
+   }
+
+
   }
 }

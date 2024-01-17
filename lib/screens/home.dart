@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/logics/authLogics.dart';
+import 'package:sello_via/logics/product_logic.dart';
 
 
 import '../models/category_model.dart';
@@ -18,12 +19,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthLogics _authLogics = Get.put(AuthLogics());
+  final ProductLogic _productLogic = Get.put(ProductLogic());
 
 
   TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _productLogic.getViewedProducts();
+  }
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -82,8 +90,7 @@ class _HomeState extends State<Home> {
                 controller: searchController,
                 firstSuffixWidget: IconButton(
                   icon: const Icon(Icons.search),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                 ),
                 autoFocus: false,
               ),
@@ -118,18 +125,22 @@ class _HomeState extends State<Home> {
                     height: 20,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.4,
 
                     child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection("products")
+                            .orderBy("date",descending: true).limit(5)
                             .snapshots(),
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
                           if (snapshot.hasData) {
                             List<ProductModel> products = [];
                             for (QueryDocumentSnapshot value
-                                in snapshot.data!.docs) {
+                            in snapshot.data!.docs) {
                               products.add(ProductModel.fromMap(value.data()));
                             }
                             return ListView.builder(
@@ -140,7 +151,8 @@ class _HomeState extends State<Home> {
                               },
                             );
                           } else {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                         }),
                   ),
@@ -171,32 +183,21 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection("products")
-                            .snapshots(),
-                        builder: (context,
-                            AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                          if (snapshot.hasData) {
-                            List<ProductModel> products = [];
-                            for (QueryDocumentSnapshot value
-                            in snapshot.data!.docs) {
-                              products.add(ProductModel.fromMap(value.data()));
-                            }
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: products.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ProductListItem(products[index]);
-                              },
-                            );
-                          } else {
-                            return Center(child: const CircularProgressIndicator());
-                          }
-                        }),
-                  ),
+                  GetBuilder<ProductLogic>(builder: (logic) {
+                    return SizedBox(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.4,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: logic.recentlyViewedProducts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ProductListItem(logic.recentlyViewedProducts.reversed.toList()[index]);
+                        },
+                      ),
+                    );
+                  }),
                 ],
               ),
             ],

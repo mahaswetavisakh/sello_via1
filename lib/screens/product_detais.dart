@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sello_via/logics/category_logics.dart';
 import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
+import 'package:sello_via/widgets/product_list_item.dart';
 
 import '../appConts/routes.dart';
 import '../models/product_model.dart';
 
 class Productdetails extends StatelessWidget{
   bool isFavorite = false;
+  final CategoryLogics _categoryLogics=Get.put(CategoryLogics());
 
   ProductModel? productData;
   @override
@@ -35,7 +39,7 @@ class Productdetails extends StatelessWidget{
                  crossAxisAlignment: CrossAxisAlignment.start,
 
                  children: [
-                   SizedBox(
+                   const SizedBox(
                      height: 20,
                    ),
                    Container(
@@ -44,13 +48,13 @@ class Productdetails extends StatelessWidget{
                      color: Colors.transparent,
                      child: Image.network(productData!.images![0],fit: BoxFit.cover,height: 230,width:300,) ,
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 20,
                    ),
                    Row(
                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                      children: [
-                       Text(productData!.name!,style: TextStyle(
+                       Text(productData!.name!,style: const TextStyle(
                          fontSize: 22,
                          fontWeight: FontWeight.bold,
                        ),),
@@ -58,14 +62,14 @@ class Productdetails extends StatelessWidget{
                          height: 40,
                          width:40,
                          decoration: ShapeDecoration(
-                           color: Color(0xFFF5675B),
+                           color: const Color(0xFFF5675B),
                            shape: RoundedRectangleBorder(
                              borderRadius: BorderRadius.circular(100),
                            ),
                          ),
 
                          child:  IconButton(
-                           icon: Icon(Icons.messenger_outline, color: Colors.white),
+                           icon: const Icon(Icons.messenger_outline, color: Colors.white),
                            onPressed: () {
                              Navigator.pushNamed(context, Routes.message_roomRoute);
                            },
@@ -73,35 +77,35 @@ class Productdetails extends StatelessWidget{
                        ),
                      ],
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 5,
                    ),
-                   Text(productData!.price!,style: TextStyle(
+                   Text(productData!.price!,style: const TextStyle(
                        fontWeight: FontWeight.bold,
                        fontSize: 19,
                        color: Color(0xFF0D7688)
 
                    ),),
-                   SizedBox(
+                   const SizedBox(
                      height: 5,
                    ),
                    Text(productData!.description!),
-                   SizedBox(
+                   const SizedBox(
                      height: 5,
                    ),
                    Row(
                      children: [
 
-                       Text(productData!.category!,style: TextStyle(
+                       Text(_categoryLogics.getCategoryNameFromCategoryId(productData!.category!)!,style: const TextStyle(
                          fontWeight: FontWeight.bold
                        ),),
-                       Text(" | "),
-                       Text(DateFormat("dd/MM/yyyy").format(DateTime.parse(productData!.date!)).toString(),style: TextStyle(
+                       const Text(" | "),
+                       Text(DateFormat("dd/MM/yyyy").format(DateTime.parse(productData!.date!)).toString(),style: const TextStyle(
                            fontWeight: FontWeight.bold
                        ),),
                      ],
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 5,
                    ),
 
@@ -112,7 +116,7 @@ class Productdetails extends StatelessWidget{
                      height: 35,
                      decoration: ShapeDecoration(
                        shape: RoundedRectangleBorder(
-                         side: BorderSide(width: 2, color: Color(0xFF3C3C3C)),
+                         side: const BorderSide(width: 2, color: Color(0xFF3C3C3C)),
                          borderRadius: BorderRadius.circular(12),
                        ),
                      ),
@@ -120,10 +124,10 @@ class Productdetails extends StatelessWidget{
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: [
                          Image.asset("assets/Google.png",height:17),
-                         SizedBox(
+                         const SizedBox(
                            width: 10,
                          ),
-                         Text('Search Details',
+                         const Text('Search Details',
                            style: TextStyle(
                              color: Color(0xFF3C3C3C),
                              fontSize: 15,
@@ -133,21 +137,22 @@ class Productdetails extends StatelessWidget{
                        ],
                      ),
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 10,
                    ),
-                   Text("Similar products",style: TextStyle(
+                   const Text("Similar products",style: TextStyle(
                      fontSize: 18,
                      fontWeight: FontWeight.bold,
                    ),),
-                   SizedBox(
+                   const SizedBox(
                      height: 5,
                    ),
                    SizedBox(
                      height: MediaQuery.of(context).size.height * 0.4,
                      child: StreamBuilder<QuerySnapshot>(
                          stream: FirebaseFirestore.instance
-                             .collection("products")
+                             .collection("products").where("subcategory",isEqualTo: productData!.subcategory!).
+                         where("category",isEqualTo: productData!.category!)
                              .snapshots(),
                          builder: (context,
                              AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
@@ -161,127 +166,11 @@ class Productdetails extends StatelessWidget{
                                scrollDirection: Axis.horizontal,
                                itemCount: products.length,
                                itemBuilder: (BuildContext context, int index) {
-                                 return Card(
-                                   child: Column(
-                                     children: [
-                                       InkWell(
-                                         onTap: () {
-                                           Navigator.pushNamed(context,
-                                               Routes.product_detailsRoute);
-                                         },
-                                         child: Container(
-                                           width: 250,
-                                           color: Colors.transparent,
-                                           child: Stack(
-                                             children: [
-                                               Container(
-                                                 //height:300
-                                                   child: Image.network(
-                                                     products[index].images![0],
-                                                     fit: BoxFit.cover,
-                                                     height: 230,
-                                                     width: 250,
-                                                   )),
-                                               Positioned(
-                                                   bottom: 15,
-                                                   right: 15,
-                                                   child: InkWell(
-                                                     onTap: () {
-                                                       // setState(() {
-                                                       //   isFavorite = !isFavorite;
-                                                       // });
-                                                     },
-                                                     child: Container(
-                                                       height: 30,
-                                                       width: 30,
-                                                       decoration: ShapeDecoration(
-                                                         color: const Color(
-                                                             0x7EE0E0DF),
-                                                         shape:
-                                                         RoundedRectangleBorder(
-                                                           borderRadius:
-                                                           BorderRadius
-                                                               .circular(100),
-                                                         ),
-                                                       ),
-                                                       child:  Icon(
-                                                         isFavorite ? Icons.favorite : Icons.favorite_outline,
-                                                         color: Colors.red,
-                                                       ),
-
-                                                     ),
-                                                   ))
-                                             ],
-                                           ),
-                                         ),
-                                       ),
-                                       Padding(
-                                         padding: const EdgeInsets.all(10.0),
-                                         child: Row(
-                                           mainAxisAlignment:
-                                           MainAxisAlignment.spaceBetween,
-                                           children: [
-                                             Column(
-                                               mainAxisAlignment:
-                                               MainAxisAlignment.start,
-                                               crossAxisAlignment:
-                                               CrossAxisAlignment.start,
-                                               children: [
-                                                 Text(
-                                                   products[index].name!,
-                                                   style: const TextStyle(
-                                                     fontWeight: FontWeight.bold,
-                                                     fontSize: 16,
-                                                     color: Colors.black87,
-                                                   ),
-                                                 ),
-                                                 Row(
-                                                   children: [
-                                                     Text(
-                                                       'Posted Date: ${products[index].date!.substring(0, 10)}',
-                                                       style: const TextStyle(
-                                                         fontWeight:
-                                                         FontWeight.w300,
-                                                         fontSize: 14,
-                                                         color:
-                                                         Color(0xFF7C035A),
-                                                       ),
-                                                     ),
-                                                     const Text(
-                                                       ' ',
-                                                       style: TextStyle(
-                                                         fontWeight:
-                                                         FontWeight.w300,
-                                                         fontSize: 14,
-                                                         color:
-                                                         Color(0xFF7C035A),
-                                                       ),
-                                                     ),
-                                                   ],
-                                                 )
-                                               ],
-                                             ),
-                                             const SizedBox(
-                                               width: 30,
-                                             ),
-                                             Text(
-                                               '₹ ${products[index].price}',
-                                               style: const TextStyle(
-                                                 fontWeight: FontWeight.bold,
-                                                 fontSize: 18,
-                                                 color: Colors.black87,
-                                               ),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ],
-                                   ),
-                                 );
+                                 return ProductListItem(products[index]);
                                },
                              );
                            } else {
-                             return Center(child: const CircularProgressIndicator());
+                             return const Center(child: CircularProgressIndicator());
                            }
                          }),
                    ),

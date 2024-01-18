@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:readmore/readmore.dart';
 import 'package:sello_via/logics/category_logics.dart';
 import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
@@ -89,7 +90,16 @@ class Productdetails extends StatelessWidget{
                    const SizedBox(
                      height: 5,
                    ),
-                   Text(productData!.description!),
+                ReadMoreText(
+                  productData!.description!,
+                  trimLines: 2,
+                  colorClickableText: Colors.red,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Show more',
+                  trimExpandedText: 'Show less',
+                  moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+
                    const SizedBox(
                      height: 5,
                    ),
@@ -100,9 +110,9 @@ class Productdetails extends StatelessWidget{
                          fontWeight: FontWeight.bold
                        ),),
                        const Text(" | "),
-                       Text(DateFormat("dd/MM/yyyy").format(DateTime.parse(productData!.date!)).toString(),style: const TextStyle(
-                           fontWeight: FontWeight.bold
-                       ),),
+                       // Text(DateFormat("dd/MM/yyyy").format(DateTime.parse(productData!.date!)).toString(),style: const TextStyle(
+                       //     fontWeight: FontWeight.bold
+                       // ),),
                      ],
                    ),
                    const SizedBox(

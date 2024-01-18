@@ -56,7 +56,7 @@ class ProductLogic extends GetxController {
           subcategory: subCategory,
           images: imgUrls,
           sellerId: _authLogics.user!.userUID,
-          date: DateTime.now.toString(),
+          date: DateTime.now().millisecondsSinceEpoch.toString(),
           views: 0,
           status: "review");
 

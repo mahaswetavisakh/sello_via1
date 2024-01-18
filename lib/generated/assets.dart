@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String assetsAnimImageloading = 'assets/anim_imageloading.gif';
   static const String assetsApple = 'assets/Apple.png';
   static const String assetsBook = 'assets/book.png';
   static const String assetsBottomImg = 'assets/bottom-img.png';

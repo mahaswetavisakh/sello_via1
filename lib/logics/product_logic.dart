@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sello_via/logics/authLogics.dart';
 
+import '../appConts/collectionName.dart';
 import '../models/product_model.dart';
 import 'cloud_storage_logic.dart';
 
@@ -93,5 +94,13 @@ class ProductLogic extends GetxController {
    }
 
 
+  }
+
+  addView(ProductModel productModel){
+    productModel.views=productModel.views!+1;
+    _db.collection(CollectionNames.productCollectionName).doc(productModel.id).
+    update({
+      "views":productModel.views
+    });
   }
 }

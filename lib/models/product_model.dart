@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ProductModel{
   String? id;
   String?  name;
@@ -29,6 +31,12 @@ class ProductModel{
       subcategory: data['subcategory'],
       views: data['views'],
     );
+  }
+
+ String toDate(String milliSecond){
+    var dt = DateTime.fromMillisecondsSinceEpoch(int.parse(milliSecond));
+    var date = DateFormat('MM/dd/yyyy').format(dt);
+    return date;
   }
 
   toMap(){

@@ -29,6 +29,7 @@ class ProductListItem extends StatelessWidget {
                   }
               );
 
+              _productLogic.addView(product);
               _productLogic.addProductToRecentlyViewed(product);
             },
             child: Container(
@@ -36,47 +37,37 @@ class ProductListItem extends StatelessWidget {
               color: Colors.transparent,
               child: Stack(
                 children: [
-                  Container(
-                    //height:300
-
-                    child:
-                    CachedNetworkImage(
-                      imageUrl: product.images![0],
-                      placeholder: (context, url) =>
-                          Image.asset("assets/anim_imageloading.gif"),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error),
-                      fit: BoxFit.cover,
-                      height: 230,
-                      width: 250,
-                    ),
+                  CachedNetworkImage(
+                    imageUrl: product.images![0],
+                    placeholder: (context, url) =>
+                        Image.asset("assets/anim_imageloading.gif"),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    fit: BoxFit.cover,
+                    height: 230,
+                    width: 250,
                   ),
                   Positioned(
                       bottom: 15,
                       right: 15,
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: ShapeDecoration(
-                            color: const Color(
-                                0x7EE0E0DF),
-                            shape:
-                            RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius
-                                  .circular(100),
-                            ),
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: ShapeDecoration(
+                          color: const Color(
+                              0x7EE0E0DF),
+                          shape:
+                          RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius
+                                .circular(100),
                           ),
-                          child: Icon(
-                            Icons.favorite_outline,
-                            color: Colors.red,
-                          ),
-
                         ),
+                        child: const Icon(
+                          Icons.favorite_outline,
+                          color: Colors.red,
+                        ),
+
                       ))
                 ],
               ),
@@ -84,41 +75,34 @@ class ProductListItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment:
-                  MainAxisAlignment.start,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    Row(
+            child: SizedBox(
+              width: 250,
+              child: Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment:
+                      MainAxisAlignment.start,
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   DateFormat("dd/MM/yyyy").format(
-                        //       DateTime.fromMillisecondsSinceEpoch(int.parse(product.date!))
-                        //   ),
-                        //   style: const TextStyle(
-                        //     fontWeight:
-                        //     FontWeight.w300,
-                        //     fontSize: 14,
-                        //     color:
-                        //     Color(0xFF7C035A),
-                        //   ),
-                        // ),
-                        const Text(
-                          ' ',
-                          style: TextStyle(
+                        Text(
+                          product.name!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          product.toDate(product.date!),
+                          style: const TextStyle(
                             fontWeight:
                             FontWeight.w300,
                             fontSize: 14,
@@ -127,21 +111,23 @@ class ProductListItem extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  '₹ ${product.price}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black87,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Flexible(
+                    child: Text(
+                      '₹ ${product.price}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

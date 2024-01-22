@@ -257,7 +257,7 @@ class _AddProductState extends State<AddProduct> {
                       subCategory: _selectedSubCategory!.id,
                       images: _img
                     );
-                    Navigator.pushNamed(context, Routes.homeRoute);
+                    Navigator.pushNamed(context, Routes.listingRoute);
                   },
                 ),
 

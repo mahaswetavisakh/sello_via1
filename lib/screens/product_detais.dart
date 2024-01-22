@@ -7,7 +7,7 @@ import 'package:sello_via/logics/category_logics.dart';
 import 'package:sello_via/widgets/custom_container.dart';
 import 'package:sello_via/widgets/navbar.dart';
 import 'package:sello_via/widgets/product_list_item.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../appConts/routes.dart';
 import '../models/product_model.dart';
 
@@ -43,11 +43,25 @@ class Productdetails extends StatelessWidget{
                    const SizedBox(
                      height: 20,
                    ),
-                   Container(
-                     width: 300,
-                     height: 230,
-                     color: Colors.transparent,
-                     child: Image.network(productData!.images![0],fit: BoxFit.cover,height: 230,width:300,) ,
+                   CarouselSlider(
+                     options: CarouselOptions(
+                       height: 230,
+                       enableInfiniteScroll: false, // Set to true for infinite scrolling
+                     ),
+                     items: productData!.images!.map((image) {
+                       return Builder(
+                         builder: (BuildContext context) {
+                           return Container(
+                             width: MediaQuery.of(context).size.width,
+                             margin: EdgeInsets.symmetric(horizontal: 5.0),
+                             decoration: BoxDecoration(
+                               color: Colors.transparent,
+                             ),
+                             child: Image.network(image, fit: BoxFit.cover),
+                           );
+                         },
+                       );
+                     }).toList(),
                    ),
                    const SizedBox(
                      height: 20,
@@ -55,10 +69,18 @@ class Productdetails extends StatelessWidget{
                    Row(
                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                      children: [
-                       Text(productData!.name!,style: const TextStyle(
-                         fontSize: 22,
-                         fontWeight: FontWeight.bold,
-                       ),),
+                       Container(
+                         width: MediaQuery.of(context).size.width - 100, // Adjust the width as needed
+                         child: Text(
+                           productData!.name!,
+                           overflow: TextOverflow.ellipsis,
+                           maxLines: 1,
+                           style: const TextStyle(
+                             fontSize: 22,
+                             fontWeight: FontWeight.bold,
+                           ),
+                         ),
+                       ),
                        Container(
                          height: 40,
                          width:40,
@@ -81,7 +103,7 @@ class Productdetails extends StatelessWidget{
                    const SizedBox(
                      height: 5,
                    ),
-                   Text(productData!.price!,style: const TextStyle(
+                   Text('₹ ${productData!.price!}',style: const TextStyle(
                        fontWeight: FontWeight.bold,
                        fontSize: 19,
                        color: Color(0xFF0D7688)

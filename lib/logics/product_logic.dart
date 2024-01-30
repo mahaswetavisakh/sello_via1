@@ -72,7 +72,7 @@ class ProductLogic extends GetxController {
     }
   }
 
-
+c
   addProductToRecentlyViewed(ProductModel product) async {
     for (ProductModel value in recentlyViewedProducts.toList()) {
       if(value.id==product.id){

@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../logics/cloud_storage_logic.dart';
-import 'loadin_widget.dart';
+import 'loading_widget.dart';
 
 class ProfilepicWidget extends StatefulWidget {
   const ProfilepicWidget({super.key});

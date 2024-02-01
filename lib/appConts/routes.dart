@@ -14,6 +14,7 @@ class Routes{
   static String paymentRoute="/payment";
   static String orderconfirmationRoute="/orderconfirmation";
   static String message_roomRoute="/message_room";
+  static String edit_productRoute="/edit_product";
 
 
 }

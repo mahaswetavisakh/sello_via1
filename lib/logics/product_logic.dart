@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,63 @@ class ProductLogic extends GetxController {
   List<ProductModel> recentlyViewedProducts=[];
   final GetStorage _localDb = GetStorage();
   final AuthLogics _authLogics = Get.put(AuthLogics());
+
+
+
+  Future updateProduct(
+      {
+        String? id,
+        String? productName,
+        String? price,
+        String? description,
+        String? category,
+        String? subCategory,
+        List? images}) async {
+    List<String> imgUrls = [];
+    if (productName!.isEmpty) {
+      Get.snackbar("Failed", "Please enter your product name");
+    } else if (price!.isEmpty) {
+      Get.snackbar("Failed", "Please enter your product price");
+    } else if (description!.isEmpty) {
+      Get.snackbar("Failed", "Please enter your product description");
+    } else if (category!.isEmpty) {
+      Get.snackbar("Failed", "Please select category");
+    } else if (subCategory!.isEmpty) {
+      Get.snackbar("Failed", "Please select Subcategory");
+    } else if (images!.isEmpty) {
+      Get.snackbar("Failed", "Please select product images");
+    } else {
+      for (String image in images) {
+        if(!image.isURL){
+          String url = await CloudStorageLogic(
+              fileName: Random.secure().toString(),
+              folderName: "products",
+              file: File(image))
+              .uploadFile();
+
+          imgUrls.add(url);
+        }
+
+      }
+
+
+      ProductModel product = ProductModel(
+          id: id,
+          name: productName,
+          price: price,
+          description: description,
+          category: category,
+          subcategory: subCategory,
+          images: imgUrls,
+          sellerId: _authLogics.user!.userUID,
+          date: DateTime.now().millisecondsSinceEpoch.toString(),
+          views: 0,
+          status: "review");
+
+      await _db.collection("products").doc(id).update(product.toMap());
+
+    }
+  }
 
   Future createProduct(
       {String? productName,
@@ -72,7 +130,7 @@ class ProductLogic extends GetxController {
     }
   }
 
-c
+
   addProductToRecentlyViewed(ProductModel product) async {
     for (ProductModel value in recentlyViewedProducts.toList()) {
       if(value.id==product.id){
@@ -103,4 +161,32 @@ c
       "views":productModel.views
     });
   }
+
+  addStatus(ProductModel productModel,bool isVisible){
+    if(productModel.status=="Hidden"){
+      productModel.status="Visible";
+    }else{
+      productModel.status="Hidden";
+    }
+    _db.collection(CollectionNames.productCollectionName).doc(productModel.id).
+    update({
+      "status":productModel.status
+    });
+
+    update();
+  }
+
+  Future<void> deleteProduct(String productId) async {
+    try {
+      await _db.collection("products").doc(productId).delete();
+      Get.snackbar("Success", "Product deleted successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete product");
+    }
+  }
+
+
+
+
+
 }

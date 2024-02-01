@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/screens/add_to_cart.dart';
+import 'package:sello_via/screens/edit_product.dart';
 import 'package:sello_via/screens/mainscreen.dart';
 import 'package:sello_via/screens/message_room.dart';
 import 'package:sello_via/screens/orderconfirmation.dart';
@@ -12,11 +13,11 @@ import 'package:sello_via/screens/product_detais.dart';
 import 'package:sello_via/screens/purchaseform.dart';
 import 'package:sello_via/screens/splash_screen.dart';
 import 'package:sello_via/screens/login.dart';
-import 'package:sello_via/screens/Profilepage.dart';
+import 'package:sello_via/screens/profile_page.dart';
 import 'package:sello_via/screens/likeditem.dart';
 import 'package:sello_via/screens/listing.dart';
 import 'package:sello_via/screens/orders.dart';
-import 'package:sello_via/screens/registerScreen.dart';
+import 'package:sello_via/screens/register_screen.dart';
 import 'package:sello_via/screens/sidebar.dart';
 
 
@@ -47,6 +48,7 @@ void main()async{
             Routes.paymentRoute:(context)=>Payment(),
             Routes.orderconfirmationRoute:(context)=>Orderconfirmation(),
             Routes.message_roomRoute:(context)=>MessageRoom(),
+            Routes.edit_productRoute:(context)=>EditProduct(),
 
         },
 

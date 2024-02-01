@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,21 +9,24 @@ import 'package:sello_via/logics/cloud_storage_logic.dart';
 import 'package:sello_via/logics/product_logic.dart';
 import 'package:sello_via/models/category_model.dart';
 import 'package:sello_via/test.dart';
-import 'package:sello_via/widgets/loadin_widget.dart';
+import 'package:sello_via/widgets/loading_widget.dart';
 import '../appConts/routes.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
 import '../widgets/navbar.dart';
 
-class AddProduct extends StatefulWidget {
+class EditProduct extends StatefulWidget {
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<EditProduct> createState() => _EditProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _EditProductState extends State<EditProduct> {
 
+  // Create instances of required logic classes
   final CategoryLogics _categoryLogics=Get.put(CategoryLogics());
   final ProductLogic _productLogics=Get.put(ProductLogic());
+
+  // State variables
   CategoryModel? _selectedCategory;
   CategoryModel? _selectedSubCategory;
   List<CategoryModel> subCategories=[];
@@ -30,9 +34,6 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _productName = TextEditingController();
   final TextEditingController _productPrice = TextEditingController();
   final TextEditingController _productDescription = TextEditingController();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +46,15 @@ class _AddProductState extends State<AddProduct> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Topbar("Add Products"),
-                const SizedBox(
-                  height: 25,
-                ),
+                // Topbar Widget
+                Topbar("Edit Products"),
+
+                // Spacing
+                const SizedBox(height: 25),
+
+                // Product Name Input
                 const Text("Product Name:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 CustomInput(
                   hint: "Please Enter Your Product Name",
                   controller: _productName,
@@ -61,12 +64,11 @@ class _AddProductState extends State<AddProduct> {
                   },
                 ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+
+                // Product Price Input
                 const Text("Product Price:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 CustomInput(
                   hint: "Please Enter Your Product Price",
                   controller: _productPrice,
@@ -77,27 +79,22 @@ class _AddProductState extends State<AddProduct> {
                   },
                 ),
 
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text("Product Description:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const SizedBox(height: 20),
 
+                // Product Description Input
+                const Text("Product Description:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 CustomInput(
                   hint: "Please Enter Your Product Description",
                   controller: _productDescription,
                   textInputAction: TextInputAction.done,
-
-
                 ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+
+                // Product Category Dropdown
                 const Text("Product Category:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 Container(
                   height: 50,
                   width: 500,
@@ -112,7 +109,6 @@ class _AddProductState extends State<AddProduct> {
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       underline: SizedBox(),
                       items: _categoryLogics.mainCategories.map((CategoryModel item) {
-                    //print("dsfsd==${_categoryLogics.mainCategories.length}");
                         return DropdownMenuItem(
                           value: item,
                           child: Text(item.name!),
@@ -123,22 +119,18 @@ class _AddProductState extends State<AddProduct> {
                         subCategories.clear();
                         _selectedSubCategory=null;
                         subCategories=  _categoryLogics.getSubcategory(_selectedCategory!);
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                     ),
                   ),
                 ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
 
+                // Product Sub Category Dropdown (if applicable)
                 if(subCategories.isNotEmpty)...[
                   const Text("Product Sub Category:",
-                      style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   Container(
                     height: 50,
                     width: 500,
@@ -160,22 +152,21 @@ class _AddProductState extends State<AddProduct> {
                         }).toList(),
                         onChanged: (CategoryModel? newValue) {
                           _selectedSubCategory=newValue;
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                       ),
                     ),
                   ),
                 ],
 
+                const SizedBox(height: 20),
 
+                // Product Images Section
                 const Text("Product Image:",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                const SizedBox(
-                  height: 10,
-                ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const SizedBox(height: 10),
+
+                // Image Selection Section
                 SizedBox(
                   height: 100,
                   child: ListView.builder(
@@ -190,7 +181,6 @@ class _AddProductState extends State<AddProduct> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Color(0xFFE1E1E1),
-
                           ),
                           child: IconButton(
                             icon: const Icon(Icons.camera_alt_outlined),
@@ -204,8 +194,6 @@ class _AddProductState extends State<AddProduct> {
                             },
                           ),
                         );
-
-
                       }
                       return Container(
                         padding: const EdgeInsets.all(5),
@@ -214,7 +202,7 @@ class _AddProductState extends State<AddProduct> {
                         width: 100,
                         decoration: BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
+                            const BorderRadius.all(Radius.circular(15)),
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: FileImage(
@@ -237,30 +225,27 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       );
-
-
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
+
+                // Add Product Button
                 CustomButton(
-                  buttonText: "Add Product",
+                  buttonText: "Update Product",
                   onTap: () async {
                     showLoading(context);
-                   await _productLogics.createProduct(
-                      productName: _productName.text,
-                      price: _productPrice.text,
-                      description: _productDescription.text,
-                      category: _selectedCategory!.id,
-                      subCategory: _selectedSubCategory!.id,
-                      images: _img
+                    await _productLogics.createProduct(
+                        productName: _productName.text,
+                        price: _productPrice.text,
+                        description: _productDescription.text,
+                        category: _selectedCategory!.id,
+                        subCategory: _selectedSubCategory!.id,
+                        images: _img
                     );
                     Navigator.pushNamed(context, Routes.listingRoute);
                   },
                 ),
-
               ],
             ),
           ],

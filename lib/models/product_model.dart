@@ -12,10 +12,11 @@ class ProductModel{
   String? sellerId;
   String? date;
   int? views;
+  bool? isVisible;
 
   ProductModel({this.name,this.id,this.images,
     this.sellerId,this.category,this.price,
-  this.date,this.description,this.status,this.subcategory,this.views});
+  this.date,this.description,this.status,this.subcategory,this.views,this.isVisible = true,});
 
   factory ProductModel.fromMap(data){
     return ProductModel(
@@ -30,6 +31,7 @@ class ProductModel{
       status: data['status'],
       subcategory: data['subcategory'],
       views: data['views'],
+      isVisible: data['isVisible'] ?? true,
     );
   }
 
@@ -52,6 +54,7 @@ class ProductModel{
       "sellerId":sellerId,
       "date":date,
       "id":id,
+      "isVisible":isVisible,
     };
   }
 }

@@ -28,7 +28,7 @@ class SideBar extends StatelessWidget{
     Account(
       icon:Icons.shopping_cart_outlined,
       maintext: "My Cart",
-      childtext: "See the products added to the cart",
+      childtext: "View the products added to the cart",
     ),
     
   ];

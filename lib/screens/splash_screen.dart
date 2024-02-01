@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sello_via/screens/login.dart';
-import 'package:sello_via/screens/Profilepage.dart';
+import 'package:sello_via/screens/profile_page.dart';
 
 import '../appConts/const.dart';
 import '../appConts/routes.dart';

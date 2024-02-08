@@ -7,7 +7,7 @@ import 'package:sello_via/widgets/navbar.dart';
 import '../appConts/routes.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
-import '../widgets/loadin_widget.dart';
+import '../widgets/loading_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 

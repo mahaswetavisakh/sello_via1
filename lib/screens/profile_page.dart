@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sello_via/logics/authLogics.dart';
-import 'package:sello_via/widgets/loadin_widget.dart';
+import 'package:sello_via/widgets/loading_widget.dart';
 import '../logics/cloud_storage_logic.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';

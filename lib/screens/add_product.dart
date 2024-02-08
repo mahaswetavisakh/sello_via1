@@ -8,12 +8,12 @@ import 'package:sello_via/logics/category_logics.dart';
 import 'package:sello_via/logics/cloud_storage_logic.dart';
 import 'package:sello_via/logics/product_logic.dart';
 import 'package:sello_via/models/category_model.dart';
-import 'package:sello_via/test.dart';
 import 'package:sello_via/widgets/loading_widget.dart';
 import '../appConts/routes.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/customInput.dart';
 import '../widgets/navbar.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class EditProduct extends StatefulWidget {
   @override
@@ -34,6 +34,23 @@ class _EditProductState extends State<EditProduct> {
   final TextEditingController _productName = TextEditingController();
   final TextEditingController _productPrice = TextEditingController();
   final TextEditingController _productDescription = TextEditingController();
+
+  // Future<File?> compressImage(File file) async {
+  //   // Generate the target path for the compressed file
+  //   String targetPath = file.path.split(".")[0] + "_compressed.jpg";
+  //
+  //   // Compress the image using the testCompressAndGetFile method
+  //   File? result = await FlutterImageCompress.compressAndGetFile(
+  //     file.absolute.path,
+  //     targetPath,
+  //     quality: 88,
+  //     rotate: 180,
+  //   );
+  //
+  //   // Return the compressed file
+  //   return result;
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +207,13 @@ class _EditProductState extends State<EditProduct> {
                               data.forEach((element) {
                                 _img!.add(element);
                               });
+
+                              // for (var element in data) {
+                              //   File? compressedImage = await compressImage(File(element.path));
+                              //   if (compressedImage != null) {
+                              //     _img!.add(XFile(compressedImage.path));
+                              //   }
+                              // }
                               setState(() {});
                             },
                           ),
@@ -232,7 +256,7 @@ class _EditProductState extends State<EditProduct> {
 
                 // Add Product Button
                 CustomButton(
-                  buttonText: "Update Product",
+                  buttonText: "Add Product",
                   onTap: () async {
                     showLoading(context);
                     await _productLogics.createProduct(

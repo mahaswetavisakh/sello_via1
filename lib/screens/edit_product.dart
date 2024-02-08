@@ -55,6 +55,11 @@ class _EditProductState extends State<EditProduct> {
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)!.settings.arguments as ProductModel;
     _productName.text=args!.name!;
+    _productPrice.text=args!.price!;
+    _productDescription.text=args!.description!;
+    _selectedCategory = _categoryLogics.mainCategories.firstWhere((category) => category.id == args!.category);
+    _selectedSubCategory = _categoryLogics.getSubcategory(_selectedCategory!).firstWhere((subcategory) => subcategory.id == args!.subcategory);
+
 
     return Scaffold(
       body: SafeArea(

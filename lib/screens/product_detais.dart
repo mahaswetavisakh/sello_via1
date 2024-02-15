@@ -183,7 +183,8 @@ class Productdetails extends StatelessWidget{
                      height: MediaQuery.of(context).size.height * 0.4,
                      child: StreamBuilder<QuerySnapshot>(
                          stream: FirebaseFirestore.instance
-                             .collection("products").where("subcategory",isEqualTo: productData!.subcategory!).
+                             .collection("products").
+                         where("subcategory",isEqualTo: productData!.subcategory!).
                          where("category",isEqualTo: productData!.category!)
                              .snapshots(),
                          builder: (context,
@@ -198,7 +199,12 @@ class Productdetails extends StatelessWidget{
                                scrollDirection: Axis.horizontal,
                                itemCount: products.length,
                                itemBuilder: (BuildContext context, int index) {
-                                 return ProductListItem(products[index]);
+                                 if(productData!.id==products[index].id){
+                                   return SizedBox();
+                                 }else{
+                                   return ProductListItem(products[index]);
+                                 }
+
                                },
                              );
                            } else {

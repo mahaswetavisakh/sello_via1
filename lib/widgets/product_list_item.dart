@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sello_via/logics/favortite_logics.dart';
 import 'package:sello_via/logics/product_logic.dart';
 
 import '../appConts/routes.dart';
@@ -10,6 +11,7 @@ import '../models/product_model.dart';
 
 class ProductListItem extends StatelessWidget {
   final ProductLogic _productLogic = Get.put(ProductLogic());
+  final FavoriteLogics _favoriteLogics = Get.put(FavoriteLogics());
   ProductModel product;
 
   ProductListItem(this.product);
@@ -50,24 +52,29 @@ class ProductListItem extends StatelessWidget {
                   Positioned(
                       bottom: 15,
                       right: 15,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: ShapeDecoration(
-                          color: const Color(
-                              0x7EE0E0DF),
-                          shape:
-                          RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius
-                                .circular(100),
+                      child: InkWell(
+                        onTap: (){
+                          _favoriteLogics.addToFavorite(product);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: ShapeDecoration(
+                            color: const Color(
+                                0x7EE0E0DF),
+                            shape:
+                            RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(100),
+                            ),
                           ),
-                        ),
-                        child: const Icon(
-                          Icons.favorite_outline,
-                          color: Colors.red,
-                        ),
+                          child: const Icon(
+                            Icons.favorite_outline,
+                            color: Colors.red,
+                          ),
 
+                        ),
                       ))
                 ],
               ),
@@ -137,3 +144,5 @@ class ProductListItem extends StatelessWidget {
   }
 
 }
+
+

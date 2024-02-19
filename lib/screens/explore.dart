@@ -9,9 +9,7 @@ import 'package:sello_via/widgets/product_list_item.dart';
 import '../appConts/routes.dart';
 import '../logics/authLogics.dart';
 import '../logics/category_logics.dart';
-import '../main.dart';
-import '../models/category_model.dart';
-import '../models/userModel.dart';
+
 import '../widgets/customInput.dart';
 
 class Explore extends StatelessWidget {

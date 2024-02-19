@@ -1,7 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sello_via/logics/product_logic.dart';
 
 import '../appConts/routes.dart';
+import '../models/product_model.dart';
+import '../logics/add_to_cart_logics.dart';
 
 
 class Topbar extends StatelessWidget {
@@ -90,17 +94,17 @@ class Bottomnav extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-      // Navigate to the next page
-      if (navtext == "Proceed to payment") {
-        Navigator.pushNamed(context, Routes.paymentRoute);
+      onTap: () {
+        // Navigate to the next page
+        if (navtext == "Proceed to payment") {
+          Navigator.pushNamed(context, Routes.paymentRoute);
 
-      } else if (navtext == "Pay now") {
-        Navigator.pushNamed(context, Routes.orderconfirmationRoute);
-      }
-      else if (navtext == "Go to Home") {
-        Navigator.pushNamed(context, Routes.homeRoute);
-      }
+        } else if (navtext == "Pay now") {
+          Navigator.pushNamed(context, Routes.orderconfirmationRoute);
+        }
+        else if (navtext == "Go to Home") {
+          Navigator.pushNamed(context, Routes.homeRoute);
+        }
       },
       child: Container(
         height: 70,
@@ -122,10 +126,15 @@ class Bottomnav extends StatelessWidget {
 
 //product detais bottom nav
 class Bottomnavproduct extends StatelessWidget {
+
+  final AddToCartLogics _addToCartLogics=Get.put(AddToCartLogics());
+  ProductModel product;
+
+
   String? navtext1;
   String? navtext2;
 
-  Bottomnavproduct(String nav1, nav2) {
+  Bottomnavproduct(this.product, String nav1, String nav2) {
     navtext1 = nav1;
     navtext2 = nav2;
   }
@@ -135,6 +144,7 @@ class Bottomnavproduct extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
+            _addToCartLogics.addToCart(product);
             Navigator.pushNamed(context, Routes.add_to_cartRoute);
           },
           child: Container(
@@ -155,6 +165,7 @@ class Bottomnavproduct extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
+
             Navigator.pushNamed(context, Routes.purchaseformRoute);
           },
           child: Container(
@@ -180,7 +191,7 @@ class Bottomnavproduct extends StatelessWidget {
 
 class Bottomnavwithicons extends StatefulWidget {
 
- final Function(int)? onClick;
+  final Function(int)? onClick;
   Bottomnavwithicons({ this.onClick});
   @override
   State<Bottomnavwithicons> createState() => _BottomnavwithiconsState();
@@ -216,7 +227,7 @@ class _BottomnavwithiconsState extends State<Bottomnavwithicons> {
                 ),
                 child: IconButton(
                   onPressed: () {
-                   widget.onClick!(0);
+                    widget.onClick!(0);
                     clickedItem = 1;
                     setState(() {});
                   },

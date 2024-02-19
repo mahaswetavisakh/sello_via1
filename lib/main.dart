@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sello_via/appConts/routes.dart';
 import 'package:sello_via/screens/add_to_cart.dart';
 import 'package:sello_via/screens/edit_product.dart';
+import 'package:sello_via/screens/explore.dart';
 import 'package:sello_via/screens/mainscreen.dart';
 import 'package:sello_via/screens/message_room.dart';
 import 'package:sello_via/screens/orderconfirmation.dart';
@@ -49,6 +50,7 @@ void main()async{
             Routes.orderconfirmationRoute:(context)=>Orderconfirmation(),
             Routes.message_roomRoute:(context)=>MessageRoom(),
             Routes.edit_productRoute:(context)=>EditProduct(),
+            Routes.exploreRoute:(context)=>Explore(),
 
         },
 

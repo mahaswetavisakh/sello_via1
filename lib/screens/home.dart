@@ -6,6 +6,7 @@ import 'package:sello_via/logics/authLogics.dart';
 import 'package:sello_via/logics/product_logic.dart';
 
 
+import '../logics/recently_viewed_logic.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
 import '../widgets/customInput.dart';
@@ -19,17 +20,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthLogics _authLogics = Get.put(AuthLogics());
+  final Recently_viewed_Logics _recently_viewed_Logics = Get.put(Recently_viewed_Logics());
   final ProductLogic _productLogic = Get.put(ProductLogic());
 
 
   TextEditingController searchController = TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _productLogic.getViewedProducts();
-  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,14 +83,19 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 20,
               ),
-              CustomInput(
-                hint: "Search",
-                controller: searchController,
-                firstSuffixWidget: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.exploreRoute);
+                },
+                child: CustomInput(
+                  hint: "Search",
+                  controller: searchController,
+                  firstSuffixWidget: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                  autoFocus: false,
                 ),
-                autoFocus: false,
               ),
               const SizedBox(
                 height: 20,
@@ -183,21 +186,37 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 20,
                   ),
-                  GetBuilder<ProductLogic>(builder: (logic) {
-                    return SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.4,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: logic.recentlyViewedProducts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ProductListItem(logic.recentlyViewedProducts.reversed.toList()[index]);
-                        },
-                      ),
-                    );
-                  }),
+                  SizedBox(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.4,
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("recentlyviewed")
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<ProductModel> products = [];
+                            for (QueryDocumentSnapshot value in snapshot.data!.docs) {
+                              products.add(ProductModel.fromMap(value.data()));
+                            }
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: products.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductListItem(products.reversed.toList()[index]);
+                              },
+                            );
+                          }else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
+                  ),
+
                 ],
               ),
             ],

@@ -85,11 +85,11 @@ class SideBar extends StatelessWidget{
                         Navigator.pushNamed(context, Routes.listingRoute);
                         break;
                       case 3:
-                        Navigator.pushNamed(context, Routes.likedItemRoute);
+                        Navigator.pushNamed(context, Routes.add_to_cartRoute);
                         break;
                       default:
                         break;
-                    }// Add other conditions for different sections if needed
+                    }
                   },
                   child: Container(
                     margin: EdgeInsets.only(left: 20,right: 20,bottom:9),

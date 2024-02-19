@@ -80,7 +80,9 @@ class Listing extends StatelessWidget {
                                        Navigator.pushNamed(
                                          context,
                                          Routes.product_detailsRoute,
-                                         arguments: products[index],
+                                         arguments:{
+                                           "productData":products[index]
+                                         }
                                        );
                                      },
                                      child: Container(

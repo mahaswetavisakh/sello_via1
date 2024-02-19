@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../logics/add_to_cart_logics.dart';
 import '../models/product_model.dart';
 import '../widgets/navbar.dart';
 
@@ -13,6 +15,43 @@ class AddtoCart extends StatefulWidget {
 }
 
 class _AddtoCartState extends State<AddtoCart> {
+
+
+  final AddToCartLogics _addToCartLogics = Get.put(AddToCartLogics());
+
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, String addToCartId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Product'),
+          content: const Text('Are you sure you want to delete this product?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Call the deleteProduct method on confirmation
+                _addToCartLogics.deleteProduct(addToCartId);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
+
+
   int quantity = 1;
 
   void incrementQuantity() {
@@ -93,7 +132,8 @@ class _AddtoCartState extends State<AddtoCart> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              cartProduct[index].name!,
+                                              cartProduct[index].name!,maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 color: Color(0xFF5E5E5E),
                                                 fontSize: 15,
@@ -112,23 +152,39 @@ class _AddtoCartState extends State<AddtoCart> {
                                               ),
                                             ),
                                             SizedBox(height: 8),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.delete,
-                                                  size: 15,
-                                                  color: Color(0xFF5E5E5E),
-                                                ),
-                                                Text(
-                                                  "Delete",
-                                                  style: TextStyle(
-                                                    color: Color(0xFF5E5E5E),
-                                                    fontSize: 13,
-                                                    fontFamily: 'Arial',
-                                                    fontWeight: FontWeight.w500,
+                                            InkWell(
+                                              onTap: (){
+                                                _showDeleteConfirmationDialog(context, cartProduct[index].id!);
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(5),
+                                                width: 80,
+                                                height: 25,
+                                                decoration: ShapeDecoration(
+                                                  color: Colors.red,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(13),
                                                   ),
                                                 ),
-                                              ],
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.delete,
+                                                      size: 15,
+                                                      color: Color(0xFF5E5E5E),
+                                                    ),
+                                                    Text(
+                                                      "Delete",
+                                                      style: TextStyle(
+                                                        color: Color(0xFF5E5E5E),
+                                                        fontSize: 13,
+                                                        fontFamily: 'Arial',
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             )
                                           ],
                                         ),

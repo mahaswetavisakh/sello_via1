@@ -5,6 +5,8 @@ import 'package:sello_via/models/product_model.dart';
 
 class AddToCartLogics extends GetxController{
 
+
+
   AuthLogics _authLogics=Get.put(AuthLogics());
   FirebaseFirestore _db = FirebaseFirestore.instance;
   void addToCart(ProductModel product){
@@ -16,4 +18,18 @@ class AddToCartLogics extends GetxController{
 
 
   }
+
+
+  Future<void> deleteProduct(String addToCartId) async {
+    try {
+      await _db.collection("addToCart").doc(addToCartId).delete();
+      Get.snackbar("Success", "Product deleted successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete product");
+    }
+  }
+
+
+
 }
+
